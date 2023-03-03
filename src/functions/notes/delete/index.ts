@@ -7,7 +7,7 @@ export default {
     {
       http: {
         method: 'delete',
-        path: 'deleteNote',
+        path: 'note',
         request: {
           schemas: {
             'application/json': schema,

@@ -1,4 +1,4 @@
-import schema from './schema';
+// import schema from './schema';
 import {handlerPath} from '~/shared/libs/handler-resolver';
 
 export default {
@@ -6,13 +6,8 @@ export default {
   events: [
     {
       http: {
-        method: 'put',
-        path: 'createNote',
-        request: {
-          schemas: {
-            'application/json': schema,
-          },
-        },
+        method: 'get',
+        path: 'note',
       },
     },
   ],

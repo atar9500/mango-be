@@ -6,8 +6,8 @@ export default {
   events: [
     {
       http: {
-        method: 'post',
-        path: 'editNote',
+        method: 'put',
+        path: 'note',
         request: {
           schemas: {
             'application/json': schema,
