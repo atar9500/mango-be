@@ -12,34 +12,17 @@ type LoginUserLambda = ValidatedEventAPIGatewayProxyEvent<typeof Schema>;
 
 const loginUser: LoginUserLambda = async event => {
   const params = {
+    AuthFlow: 'ADMIN_NO_SRP_AUTH',
     UserPoolId: process.env.USER_POOL_ID,
-    Username: event.body.email,
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: event.body.email,
-      },
-      {
-        Name: 'name',
-        Value: event.body.name,
-      },
-    ],
-    MessageAction: 'SUPPRESS',
+    ClientId: process.env.CLIENT_ID,
+    AuthParameters: {
+      USERNAME: event.body.email,
+      PASSWORD: event.body.password,
+    },
   };
+  const response = await cognito.adminInitiateAuth(params).promise();
 
-  const {User} = await cognito.adminCreateUser(params).promise();
-
-  if (User) {
-    const passwordParams = {
-      Password: event.body.password,
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: event.body.email,
-      Permanent: true,
-    };
-    await cognito.adminSetUserPassword(passwordParams).promise();
-  }
-
-  return formatJSONResponse();
+  return formatJSONResponse({token: response.AuthenticationResult.IdToken});
 };
 
 export const main = middyfy(loginUser);
