@@ -3,6 +3,7 @@ import type {AWS} from '@serverless/typescript';
 
 import * as functions from '~/functions';
 import * as dynamoDbTables from '~/resources/dyanmoDb';
+import * as cognito from '~/resources/cognito';
 
 const serverlessConfiguration: AWS = {
   useDotenv: true,
@@ -22,6 +23,10 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       NOTES_TABLE: '${env:NOTES_TABLE}',
+      USER_POOL_ID: '${env:USER_POOL_ID}',
+      USER_POOL_NAME: '${env:USER_POOL_NAME}',
+      CLIENT_ID: '${env:CLIENT_ID}',
+      CLIENT_NAME: '${env:CLIENT_NAME}',
     },
     iam: {
       role: {
@@ -46,6 +51,7 @@ const serverlessConfiguration: AWS = {
   resources: {
     Resources: {
       ...dynamoDbTables,
+      ...cognito,
     },
   },
   // import the function via paths

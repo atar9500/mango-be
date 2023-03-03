@@ -8,7 +8,8 @@ export default {
     {
       http: {
         method: 'post',
-        path: 'auth/register',
+        path: 'auth/signup',
+        cors: true,
         request: {
           schemas: {
             'application/json': schema,

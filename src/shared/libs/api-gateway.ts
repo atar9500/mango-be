@@ -22,7 +22,7 @@ type ResponseObject = Record<string, unknown>;
 type ResponseArray = ResponseObject[];
 
 export const formatJSONResponse = (
-  response: ResponseObject | ResponseArray
+  response: ResponseObject | ResponseArray = {},
 ) => {
   return {
     statusCode: 200,

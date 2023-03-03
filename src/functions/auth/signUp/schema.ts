@@ -2,10 +2,10 @@ const schema = {
   type: 'object',
   properties: {
     email: {type: 'string'},
-    mame: {type: 'string'},
+    name: {type: 'string'},
     password: {type: 'string'},
   },
-  required: ['email', 'mame', 'password'],
+  required: ['email', 'name', 'password'],
 } as const;
 
 export default schema;
