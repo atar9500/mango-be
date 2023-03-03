@@ -1,8 +1,9 @@
+import {DynamoDB} from 'aws-sdk';
+
 import type {ValidatedEventAPIGatewayProxyEvent} from '~/shared/libs/api-gateway';
 import {formatJSONResponse} from '~/shared/libs/api-gateway';
 import {middyfy} from '~/shared/libs/lambda';
 import getUpdateParams from '~/shared/utils/getUpdateParams';
-import {DynamoDB} from 'aws-sdk';
 
 import Schema from './schema';
 

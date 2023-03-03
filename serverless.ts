@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type {AWS} from '@serverless/typescript';
 
 import * as functions from '~/functions';

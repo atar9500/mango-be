@@ -1,7 +1,8 @@
+import {DynamoDB} from 'aws-sdk';
+
 import type {ValidatedEventAPIGatewayProxyEvent} from '~/shared/libs/api-gateway';
 import {formatJSONResponse} from '~/shared/libs/api-gateway';
 import {middyfy} from '~/shared/libs/lambda';
-import {DynamoDB} from 'aws-sdk';
 
 const db = new DynamoDB.DocumentClient();
 
