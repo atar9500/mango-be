@@ -1,4 +1,4 @@
-const userPool = {
+const cognitoUserPool = {
   Type: 'AWS::Cognito::UserPool',
   Properties: {
     UserPoolName: '${env:USER_POOL_NAME}',
@@ -19,4 +19,4 @@ const userPool = {
   },
 };
 
-export default userPool;
+export default cognitoUserPool;

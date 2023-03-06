@@ -5,6 +5,8 @@
   "main": "serverless.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "serverless deploy",
+    "redeploy": "serverless remove && serverless deploy",
     "lint": "eslint ."
   },
   "engines": {
@@ -12,6 +14,7 @@
   },
   "dependencies": {
     "@middy/core": "^3.4.0",
+    "@middy/http-error-handler": "^4.2.6",
     "@middy/http-json-body-parser": "^3.4.0"
   },
   "devDependencies": {
