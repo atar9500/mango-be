@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "serverless deploy",
     "redeploy": "serverless remove && serverless deploy",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "init-env": "bash ./scripts/init_env.sh"
   },
   "engines": {
     "node": ">=14.15.0"

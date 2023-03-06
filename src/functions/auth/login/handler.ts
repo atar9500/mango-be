@@ -16,10 +16,11 @@ const loginUser: LoginUserLambda = async event => {
     UserPoolId: process.env.USER_POOL_ID,
     ClientId: process.env.CLIENT_ID,
     AuthParameters: {
-      USERNAME: event.body.email,
+      USERNAME: event.body.email || event.body.phone_number,
       PASSWORD: event.body.password,
     },
   };
+
   const response = await cognito.adminInitiateAuth(params).promise();
 
   return formatJSONResponse({token: response.AuthenticationResult.IdToken});

@@ -23,9 +23,10 @@ type ResponseArray = ResponseObject[];
 
 export const formatJSONResponse = (
   response: ResponseObject | ResponseArray = {},
+  statusCode = 200,
 ) => {
   return {
-    statusCode: 200,
+    statusCode,
     body: JSON.stringify(response),
   };
 };

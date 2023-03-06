@@ -1,7 +1,9 @@
-const cognitoUserPoolClient = {
+const CLIENT_NAME = '${env:SERVICE}-user_pool_client';
+
+export const CognitoUserPoolClient = {
   Type: 'AWS::Cognito::UserPoolClient',
   Properties: {
-    ClientName: '${env:USER_POOL_CLIENT_NAME}',
+    ClientName: CLIENT_NAME,
     GenerateSecret: true,
     UserPoolId: {Ref: 'CognitoUserPool'},
     AccessTokenValidity: 5,
@@ -9,5 +11,3 @@ const cognitoUserPoolClient = {
     ExplicitAuthFlows: ['ADMIN_NO_SRP_AUTH'],
   },
 };
-
-export default cognitoUserPoolClient;

@@ -2,8 +2,9 @@
 import type {AWS} from '@serverless/typescript';
 
 import * as functions from '~/functions';
-import * as dynamoDbTables from '~/resources/dyanmoDb';
-import * as cognito from '~/resources/cognito';
+import {dynamoDBResources, dynamoDBIAMRoles} from '~/resources/dyanmoDb';
+import {cognitoResources} from '~/resources/cognito';
+import {SNSIAMRoles, SNSResources} from '~/resources/sns';
 
 const serverlessConfiguration: AWS = {
   useDotenv: true,
@@ -22,7 +23,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      NOTES_TABLE: '${env:NOTES_TABLE}',
+      NOTES_TABLE: '${env:SERVICE}-notes_table',
       USER_POOL_ID: {Ref: 'CognitoUserPool'},
     },
     iam: {
@@ -31,27 +32,23 @@ const serverlessConfiguration: AWS = {
           {
             Effect: 'Allow',
             Action: [
-              'dynamodb:DescribeTable',
-              'dynamodb:Query',
-              'dynamodb:Scan',
-              'dynamodb:GetItem',
-              'dynamodb:PutItem',
-              'dynamodb:UpdateItem',
-              'dynamodb:DeleteItem',
               'cognito-idp:AdminInitiateAuth',
               'cognito-idp:AdminCreateUser',
               'cognito-idp:AdminSetUserPassword',
             ],
             Resource: '*',
           },
+          ...dynamoDBIAMRoles,
+          ...SNSIAMRoles,
         ],
       },
     },
   },
   resources: {
     Resources: {
-      ...dynamoDbTables,
-      ...cognito,
+      ...dynamoDBResources,
+      ...cognitoResources,
+      ...SNSResources,
     },
   },
   // import the function via paths

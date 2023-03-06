@@ -24,19 +24,15 @@ const signUpUser: SignUpUserLambda = async event => {
         Value: event.body.name,
       },
     ],
-    MessageAction: 'SUPPRESS',
   };
 
-  const {User} = await cognito.adminCreateUser(params).promise();
-
-  if (User) {
-    const passwordParams = {
-      Password: event.body.password,
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: event.body.email,
-      Permanent: true,
-    };
-    await cognito.adminSetUserPassword(passwordParams).promise();
+  try {
+    const {User} = await cognito.adminCreateUser(params).promise();
+    if (!User) {
+      return formatJSONResponse({message: 'Failed to create a user!'}, 400);
+    }
+  } catch (error) {
+    return formatJSONResponse({message: error}, 400);
   }
 
   return formatJSONResponse();

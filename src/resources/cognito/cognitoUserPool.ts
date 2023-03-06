@@ -1,10 +1,16 @@
-const cognitoUserPool = {
+const USER_POOL_NAME = '${env:SERVICE}-user_pool';
+
+export const CognitoUserPool = {
   Type: 'AWS::Cognito::UserPool',
   Properties: {
-    UserPoolName: '${env:USER_POOL_NAME}',
+    UserPoolName: USER_POOL_NAME,
     Schema: [
       {
         Name: 'email',
+        Required: true,
+      },
+      {
+        Name: 'phone_number',
         Required: true,
         Mutable: true,
       },
@@ -14,9 +20,22 @@ const cognitoUserPool = {
         Mutable: true,
       },
     ],
-    Policies: {PasswordPolicy: {MinimumLength: 6}},
-    AutoVerifiedAttributes: ['email'],
+    Policies: {
+      PasswordPolicy: {
+        RequireLowercase: true,
+        RequireSymbols: true,
+        RequireNumbers: true,
+        MinimumLength: 8,
+        RequireUppercase: true,
+      },
+    },
+    UsernameAttributes: ['email', 'phone_number'],
+    AutoVerifiedAttributes: ['email', 'phone_number'],
+    SmsConfiguration: {
+      SnsCallerArn:
+        'arn:aws:sns:${env:REGION}:${aws:accountId}:${env:SERVICE}-sms_auth',
+      ExternalId: '${env:SMS_AUTH_EXTERNAL_ID}',
+      SnsRegion: '${env:REGION}',
+    },
   },
 };
-
-export default cognitoUserPool;

@@ -1,2 +1,4 @@
-export {default as CognitoUserPoolClient} from './cognitoUserPoolClient';
-export {default as CognitoUserPool} from './cognitoUserPool';
+import {CognitoUserPoolClient} from './cognitoUserPoolClient';
+import {CognitoUserPool} from './cognitoUserPool';
+
+export const cognitoResources = {CognitoUserPoolClient, CognitoUserPool};
