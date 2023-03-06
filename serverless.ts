@@ -4,7 +4,7 @@ import type {AWS} from '@serverless/typescript';
 import * as functions from '~/functions';
 import {dynamoDBResources, dynamoDBIAMRoles} from '~/resources/dyanmoDb';
 import {cognitoResources} from '~/resources/cognito';
-import {SNSIAMRoles, SNSResources} from '~/resources/sns';
+import {SNSResources} from '~/resources/sns';
 
 const serverlessConfiguration: AWS = {
   useDotenv: true,
@@ -39,7 +39,6 @@ const serverlessConfiguration: AWS = {
             Resource: '*',
           },
           ...dynamoDBIAMRoles,
-          ...SNSIAMRoles,
         ],
       },
     },
