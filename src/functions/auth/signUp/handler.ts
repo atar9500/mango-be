@@ -20,6 +20,10 @@ const signUpUser: SignUpUserLambda = async event => {
         Value: event.body.email,
       },
       {
+        Name: 'phone_number',
+        Value: event.body.phone_number,
+      },
+      {
         Name: 'name',
         Value: event.body.name,
       },
@@ -31,11 +35,10 @@ const signUpUser: SignUpUserLambda = async event => {
     if (!User) {
       return formatJSONResponse({message: 'Failed to create a user!'}, 400);
     }
+    return formatJSONResponse(User.Attributes);
   } catch (error) {
     return formatJSONResponse({message: error}, 400);
   }
-
-  return formatJSONResponse();
 };
 
 export const main = middyfy(signUpUser);
