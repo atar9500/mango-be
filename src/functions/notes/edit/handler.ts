@@ -1,7 +1,7 @@
 import {DynamoDB} from 'aws-sdk';
 
-import type {ValidatedEventAPIGatewayProxyEvent} from '~/shared/libs/api-gateway';
-import {formatJSONResponse} from '~/shared/libs/api-gateway';
+import type {ValidatedEventAPIGatewayProxyEvent} from '~/shared/types/apiGateway';
+import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import {middyfy} from '~/shared/libs/lambda';
 import getUpdateParams from '~/shared/utils/getUpdateParams';
 
@@ -11,7 +11,7 @@ const db = new DynamoDB.DocumentClient();
 
 type EditNoteLambda = ValidatedEventAPIGatewayProxyEvent<typeof Schema>;
 
-const editNote: EditNoteLambda = async (event) => {
+const editNote: EditNoteLambda = async event => {
   const currentTime = Date.now();
   const {id, authorId, ...rest} = event.body;
   const note = {modifiedAt: currentTime, ...rest};
