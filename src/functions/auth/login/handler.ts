@@ -16,7 +16,7 @@ const loginUser: LoginUserLambda = async event => {
     UserPoolId: process.env.USER_POOL_ID,
     ClientId: process.env.CLIENT_ID,
     AuthParameters: {
-      USERNAME: event.body.email || event.body.phone_number,
+      USERNAME: event.body.email,
       PASSWORD: event.body.password,
     },
   };

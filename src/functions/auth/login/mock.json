@@ -2,5 +2,5 @@
   "headers": {
     "Content-Type": "application/json"
   },
-  "body": "{\"email\": \"john.doe@example.com\", \"password\": \"abcd1234\"}"
+  "body": "{\"email\": \"john.doe@example.com\", \"name\": \"John Doe\"}"
 }

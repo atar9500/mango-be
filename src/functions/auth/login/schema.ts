@@ -3,7 +3,6 @@ const schema = {
   properties: {
     email: {type: 'string'},
     password: {type: 'string'},
-    phone_number: {type: 'string'},
   },
   required: ['password'],
 } as const;
