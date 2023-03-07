@@ -1,12 +1,12 @@
 import {DynamoDB} from 'aws-sdk';
 
-import type {ValidatedEventAPIGatewayProxyEvent} from '~/shared/types/apiGateway';
+import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import {middyfy} from '~/shared/libs/lambda';
 
 const db = new DynamoDB.DocumentClient();
 
-type GetNotesLambda = ValidatedEventAPIGatewayProxyEvent;
+type GetNotesLambda = APIGatewayHandler;
 
 const getNotes: GetNotesLambda = async () => {
   const results = await db

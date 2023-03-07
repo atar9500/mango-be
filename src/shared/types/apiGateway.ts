@@ -12,7 +12,7 @@ type ValidatedAPIGatewayProxyEvent<S = unknown> = Omit<
   body: FromSchema<S>;
 };
 
-export type ValidatedEventAPIGatewayProxyEvent<S = unknown> = Handler<
+export type APIGatewayHandler<S = unknown> = Handler<
   ValidatedAPIGatewayProxyEvent<S>,
   APIGatewayProxyResult
 >;

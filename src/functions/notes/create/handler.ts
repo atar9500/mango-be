@@ -2,7 +2,7 @@ import {randomUUID} from 'crypto';
 
 import {DynamoDB} from 'aws-sdk';
 
-import type {ValidatedEventAPIGatewayProxyEvent} from '~/shared/types/apiGateway';
+import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import {middyfy} from '~/shared/libs/lambda';
 
@@ -10,7 +10,7 @@ import Schema from './schema';
 
 const db = new DynamoDB.DocumentClient();
 
-type CreationLambda = ValidatedEventAPIGatewayProxyEvent<typeof Schema>;
+type CreationLambda = APIGatewayHandler<typeof Schema>;
 
 const createNote: CreationLambda = async event => {
   const currentTime = Date.now();
