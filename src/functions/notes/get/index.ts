@@ -1,5 +1,5 @@
 // import schema from './schema';
-import {handlerPath} from '~/shared/libs/handler-resolver';
+import handlerPath from '~/shared/utils/handlerPath';
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
