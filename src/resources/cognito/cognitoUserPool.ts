@@ -32,6 +32,9 @@ export const CognitoUserPool = {
     UsernameAttributes: ['email'],
     AutoVerifiedAttributes: ['email', 'phone_number'],
     MfaConfiguration: 'OFF',
+    UserAttributeUpdateSettings: {
+      AttributesRequireVerificationBeforeUpdate: ['phone_number'],
+    },
     SmsConfiguration: {
       SnsCallerArn: {'Fn::GetAtt': ['SMSAuthIAMRole', 'Arn']},
       ExternalId: '${env:SMS_AUTH_EXTERNAL_ID}',

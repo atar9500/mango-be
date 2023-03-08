@@ -8,6 +8,6 @@ export const CognitoUserPoolClient = {
     UserPoolId: {Ref: 'CognitoUserPool'},
     AccessTokenValidity: 5,
     IdTokenValidity: 5,
-    ExplicitAuthFlows: ['ADMIN_NO_SRP_AUTH'],
+    ExplicitAuthFlows: ['ADMIN_NO_SRP_AUTH', 'USER_PASSWORD_AUTH'],
   },
 };
