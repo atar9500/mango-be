@@ -8,7 +8,7 @@ export default {
     {
       http: {
         method: 'post',
-        path: 'auth/sendOtp',
+        path: 'auth/verifyOtp',
         cors: true,
         request: {
           schemas: {

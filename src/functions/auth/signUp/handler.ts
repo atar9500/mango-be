@@ -11,22 +11,15 @@ const cognito = new CognitoIdentityServiceProvider();
 type SignUpUserLambda = APIGatewayHandler<typeof Schema>;
 
 const signUpUser: SignUpUserLambda = async event => {
+  const {email, phoneNumber, name} = event.body;
+
   const params = {
     UserPoolId: process.env.USER_POOL_ID,
-    Username: event.body.email,
+    Username: email,
     UserAttributes: [
-      {
-        Name: 'email',
-        Value: event.body.email,
-      },
-      {
-        Name: 'phone_number',
-        Value: event.body.phone_number,
-      },
-      {
-        Name: 'name',
-        Value: event.body.name,
-      },
+      {Name: 'email', Value: email},
+      {Name: 'phone_number', Value: phoneNumber},
+      {Name: 'name', Value: name},
     ],
   };
 
