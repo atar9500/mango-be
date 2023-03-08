@@ -1,19 +1,12 @@
 const TABLE_NAME = '${env:SERVICE}-opt_table';
 
-export const OTPTable = {
+export const OtpTable = {
   Type: 'AWS::DynamoDB::Table',
   DeletionPolicy: 'Delete',
   Properties: {
     TableName: TABLE_NAME,
-    AttributeDefinitions: [
-      {AttributeName: 'email', AttributeType: 'S'},
-      {AttributeName: 'phone_number', AttributeType: 'S'},
-      {AttributeName: 'otp', AttributeType: 'S'},
-    ],
-    KeySchema: [
-      {AttributeName: 'email', KeyType: 'HASH'},
-      {AttributeName: 'phone_number', KeyType: 'RANGE'},
-    ],
+    AttributeDefinitions: [{AttributeName: 'hash', AttributeType: 'S'}],
+    KeySchema: [{AttributeName: 'hash', KeyType: 'HASH'}],
     ProvisionedThroughput: {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1,
@@ -25,7 +18,7 @@ export const OTPTable = {
   },
 };
 
-export const OTPTableIAMRole = {
+export const OtpTableIAMRole = {
   Effect: 'Allow',
   Action: [
     'dynamodb:DescribeTable',

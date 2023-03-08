@@ -16,3 +16,6 @@ echo "REGION=$_region" >> .env
 
 sms_auth_external_id=$(openssl rand -hex 32)
 echo "SMS_AUTH_EXTERNAL_ID=$sms_auth_external_id" >> .env
+
+secret=$(openssl rand -hex 32)
+echo "SECRET=$secret" >> .env

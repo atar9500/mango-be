@@ -1,6 +1,6 @@
 import {NotesTable, NotesTableIAMRole} from './notesTable';
-import {OTPTable, OTPTableIAMRole} from './otpTable';
+import {OtpTable, OtpTableIAMRole} from './otpTable';
 
-export const dynamoDBResources = {NotesTable, OTPTable};
+export const dynamoDBResources = {NotesTable, OtpTable};
 
-export const dynamoDBIAMRoles = [NotesTableIAMRole, OTPTableIAMRole];
+export const dynamoDBIAMRoles = [NotesTableIAMRole, OtpTableIAMRole];

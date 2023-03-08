@@ -24,7 +24,9 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       NOTES_TABLE: '${env:SERVICE}-notes_table',
+      OTP_TABLE: '${env:SERVICE}-otp-table',
       USER_POOL_ID: {Ref: 'CognitoUserPool'},
+      SECRET: '$:env:SECRET',
     },
     iam: {
       role: {
