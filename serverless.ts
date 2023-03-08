@@ -3,7 +3,7 @@ import type {AWS} from '@serverless/typescript';
 
 import * as functions from '~/functions';
 import {dynamoDBResources, dynamoDBIAMRoles} from '~/resources/dyanmoDb';
-import {cognitoResources} from '~/resources/cognito';
+import {cognitoIAMRoles, cognitoResources} from '~/resources/cognito';
 import {SNSResources} from '~/resources/sns';
 
 const serverlessConfiguration: AWS = {
@@ -30,18 +30,7 @@ const serverlessConfiguration: AWS = {
     },
     iam: {
       role: {
-        statements: [
-          {
-            Effect: 'Allow',
-            Action: [
-              'cognito-idp:AdminInitiateAuth',
-              'cognito-idp:AdminCreateUser',
-              'cognito-idp:AdminSetUserPassword',
-            ],
-            Resource: '*',
-          },
-          ...dynamoDBIAMRoles,
-        ],
+        statements: [...cognitoIAMRoles, ...dynamoDBIAMRoles],
       },
     },
   },

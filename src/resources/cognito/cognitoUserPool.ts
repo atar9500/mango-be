@@ -42,3 +42,15 @@ export const CognitoUserPool = {
     },
   },
 };
+
+export const CongitoUserPoolIAMRole = {
+  Effect: 'Allow',
+  Action: [
+    'cognito-idp:AdminInitiateAuth',
+    'cognito-idp:AdminCreateUser',
+    'cognito-idp:AdminSetUserPassword',
+    'cognito-idp:AdminUpdateUserAttributes',
+    'cognito-idp:AdminGetUser',
+  ],
+  Resource: [{'Fn::GetAtt': ['CognitoUserPool', 'Arn']}],
+};

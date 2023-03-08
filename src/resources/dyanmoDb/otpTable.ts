@@ -13,21 +13,13 @@ export const OtpTable = {
     },
     TimeToLiveSpecification: {
       AttributeName: 'ttl',
-      TimeToLiveStatus: 'ENABLED',
+      Enabled: true,
     },
   },
 };
 
 export const OtpTableIAMRole = {
   Effect: 'Allow',
-  Action: [
-    'dynamodb:DescribeTable',
-    'dynamodb:Query',
-    'dynamodb:Scan',
-    'dynamodb:GetItem',
-    'dynamodb:PutItem',
-    'dynamodb:UpdateItem',
-    'dynamodb:DeleteItem',
-  ],
-  Resource: [{'Fn::GetAtt': ['OTPTable', 'Arn']}],
+  Action: ['dynamodb:GetItem', 'dynamodb:PutItem', 'dynamodb:DeleteItem'],
+  Resource: [{'Fn::GetAtt': ['OtpTable', 'Arn']}],
 };
