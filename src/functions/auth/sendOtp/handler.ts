@@ -1,17 +1,16 @@
 import * as crypto from 'crypto';
 
-import {DynamoDB, SNS, CognitoIdentityServiceProvider} from 'aws-sdk';
+import {DynamoDB, SNS} from 'aws-sdk';
 
 import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import {middyfy} from '~/shared/libs/lambda';
 import sha256 from '~/shared/utils/sha256';
-import {parseAttributesList} from '~/shared/utils/parseAttributes';
+import extractBearerToken from '~/shared/utils/extractBearerToken';
 
 import Schema from './schema';
 
 const db = new DynamoDB.DocumentClient();
-const cognito = new CognitoIdentityServiceProvider();
 const sns = new SNS();
 
 type SendOtpLambda = APIGatewayHandler<typeof Schema>;
@@ -32,9 +31,9 @@ const generateOtp = () => {
   return `${padding}${num}`;
 };
 
-const logOtp = async (email: string, phoneNumber: string, otp: string) => {
+const logOtp = async (...data: string[]) => {
   const ttl = Math.floor(Date.now() / 1000) + 120;
-  const hash = sha256(email, phoneNumber, otp);
+  const hash = sha256(...data);
   await db.put({TableName: process.env.OTP_TABLE, Item: {hash, ttl}}).promise();
 };
 
@@ -47,21 +46,10 @@ const smsOtp = async (phoneNumber: string, otp: string) => {
     .promise();
 };
 
-const isUserExists = async (email: string, phoneNumber: string) => {
-  const user = await cognito
-    .adminGetUser({UserPoolId: process.env.USER_POOL_ID, Username: email})
-    .promise();
-  const {phone_number} = parseAttributesList(user.UserAttributes);
-  return phone_number === phoneNumber;
-};
-
 const sendOtp: SendOtpLambda = async event => {
-  const {phoneNumber, email} = event.body;
-
-  const userExists = await isUserExists(email, phoneNumber);
-  if (userExists) {
-    return formatJSONResponse({}, {statusCode: 400});
-  }
+  const {phoneNumber} = event.body;
+  const {Authorization} = event.headers;
+  const token = extractBearerToken(Authorization);
 
   const optedOut = await isNumberOptedOut(phoneNumber);
   if (optedOut) {
@@ -69,7 +57,7 @@ const sendOtp: SendOtpLambda = async event => {
   }
 
   const otp = generateOtp();
-  await logOtp(email, phoneNumber, otp);
+  await logOtp(phoneNumber, otp, token);
   await smsOtp(phoneNumber, otp);
 
   return formatJSONResponse({});

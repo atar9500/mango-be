@@ -33,7 +33,7 @@ export const SMSAuthIAMRole = {
           Statement: [
             {
               Effect: 'Allow',
-              Action: ['SNS:Publish'],
+              Action: ['SNS:Publish', 'SNS:CheckIfPhoneNumberIsOptedOut'],
               Resource: ['*'],
             },
           ],

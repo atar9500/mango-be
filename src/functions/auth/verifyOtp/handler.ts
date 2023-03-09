@@ -4,6 +4,7 @@ import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import {middyfy} from '~/shared/libs/lambda';
 import sha256 from '~/shared/utils/sha256';
+import extractBearerToken from '~/shared/utils/extractBearerToken';
 
 import Schema from './schema';
 
@@ -12,23 +13,26 @@ const cognito = new CognitoIdentityServiceProvider();
 
 type VerifyOtpLambda = APIGatewayHandler<typeof Schema>;
 
-const markAsVerified = async (email: string) => {
+const markAsVerified = async (accessToken: string, phoneNumber: string) => {
   await cognito
-    .adminUpdateUserAttributes({
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: email,
+    .updateUserAttributes({
+      AccessToken: accessToken,
       UserAttributes: [
         {
           Name: 'phone_number_verified',
           Value: 'true',
+        },
+        {
+          Name: 'phoneNumber',
+          Value: phoneNumber,
         },
       ],
     })
     .promise();
 };
 
-const checkOtp = async (email: string, phoneNumber: string, otp: string) => {
-  const hash = sha256(email, phoneNumber, otp);
+const checkOtp = async (...data: string[]) => {
+  const hash = sha256(...data);
   const params = {
     TableName: process.env.OTP_TABLE,
     Key: {hash},
@@ -45,14 +49,16 @@ const checkOtp = async (email: string, phoneNumber: string, otp: string) => {
 };
 
 const verifyOtp: VerifyOtpLambda = async event => {
-  const {phoneNumber, email, otp} = event.body;
+  const {phoneNumber, otp} = event.body;
+  const {Authorization} = event.headers;
+  const token = extractBearerToken(Authorization);
 
-  const verified = await checkOtp(email, phoneNumber, otp);
+  const verified = await checkOtp(phoneNumber, otp, token);
   if (!verified) {
     return formatJSONResponse({}, {statusCode: 400});
   }
 
-  await markAsVerified(email);
+  await markAsVerified(Authorization, phoneNumber);
 
   return formatJSONResponse({});
 };
