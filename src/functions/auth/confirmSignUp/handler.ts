@@ -35,15 +35,12 @@ const loginUser: LoginUserLambda = async event => {
 
     const user = decodeIdToken(AuthenticationResult.IdToken);
 
-    return formatJSONResponse(
-      {user},
-      {
-        headers: {
-          'Access-Token': AuthenticationResult.AccessToken,
-          'Refresh-Token': AuthenticationResult.RefreshToken,
-        },
+    return formatJSONResponse(user, {
+      headers: {
+        'Access-Token': AuthenticationResult.AccessToken,
+        'Refresh-Token': AuthenticationResult.RefreshToken,
       },
-    );
+    });
   }
 
   return formatJSONResponse(response);

@@ -3,6 +3,7 @@ import {CognitoIdentityServiceProvider} from 'aws-sdk';
 import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import {middyfy} from '~/shared/libs/lambda';
+import decodeIdToken from '~/shared/utils/decodeIdToken';
 
 import Schema from './schema';
 
@@ -11,7 +12,7 @@ const cognito = new CognitoIdentityServiceProvider();
 type LoginUserLambda = APIGatewayHandler<typeof Schema>;
 
 const loginUser: LoginUserLambda = async event => {
-  const response = await cognito
+  const {AuthenticationResult, ...response} = await cognito
     .adminInitiateAuth({
       AuthFlow: 'ADMIN_NO_SRP_AUTH',
       UserPoolId: process.env.USER_POOL_ID,
@@ -22,6 +23,16 @@ const loginUser: LoginUserLambda = async event => {
       },
     })
     .promise();
+
+  if (AuthenticationResult) {
+    const user = decodeIdToken(AuthenticationResult.IdToken);
+    return formatJSONResponse(user, {
+      headers: {
+        'Access-Token': AuthenticationResult.AccessToken,
+        'Refresh-Token': AuthenticationResult.RefreshToken,
+      },
+    });
+  }
 
   return formatJSONResponse(response);
 };
