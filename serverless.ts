@@ -26,6 +26,7 @@ const serverlessConfiguration: AWS = {
       NOTES_TABLE: '${env:SERVICE}-notes_table',
       OTP_TABLE: '${env:SERVICE}-otp-table',
       USER_POOL_ID: {Ref: 'CognitoUserPool'},
+      USER_POOL_CLIENT_ID: {Ref: 'CognitoUserPoolClient'},
       SECRET: '$:env:SECRET',
     },
     iam: {

@@ -49,7 +49,7 @@ const verifyOtp: VerifyOtpLambda = async event => {
 
   const verified = await checkOtp(email, phoneNumber, otp);
   if (!verified) {
-    return formatJSONResponse({}, 400);
+    return formatJSONResponse({}, {statusCode: 400});
   }
 
   await markAsVerified(email);

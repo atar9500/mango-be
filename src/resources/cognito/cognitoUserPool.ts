@@ -11,7 +11,6 @@ export const CognitoUserPool = {
       },
       {
         Name: 'phone_number',
-        Required: true,
         Mutable: true,
       },
       {

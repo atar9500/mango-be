@@ -60,12 +60,12 @@ const sendOtp: SendOtpLambda = async event => {
 
   const userExists = await isUserExists(email, phoneNumber);
   if (userExists) {
-    return formatJSONResponse({}, 400);
+    return formatJSONResponse({}, {statusCode: 400});
   }
 
   const optedOut = await isNumberOptedOut(phoneNumber);
   if (optedOut) {
-    return formatJSONResponse({}, 400);
+    return formatJSONResponse({}, {statusCode: 400});
   }
 
   const otp = generateOtp();

@@ -3,9 +3,8 @@ const schema = {
   properties: {
     email: {type: 'string'},
     name: {type: 'string'},
-    phoneNumber: {type: 'string'},
   },
-  required: ['email', 'phoneNumber', 'name'],
+  required: ['email', 'name'],
 } as const;
 
 export default schema;

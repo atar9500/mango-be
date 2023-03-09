@@ -4,7 +4,7 @@ export const CognitoUserPoolClient = {
   Type: 'AWS::Cognito::UserPoolClient',
   Properties: {
     ClientName: CLIENT_NAME,
-    GenerateSecret: true,
+    GenerateSecret: false,
     UserPoolId: {Ref: 'CognitoUserPool'},
     AccessTokenValidity: 5,
     IdTokenValidity: 5,
