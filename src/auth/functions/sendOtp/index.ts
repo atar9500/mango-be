@@ -7,7 +7,7 @@ export default {
   role: {'Fn::GetAtt': ['SendOtpRole', 'Arn']},
   events: [
     {
-      http: {
+      httpApi: {
         method: 'post',
         path: 'auth/sendOtp',
         cors: true,

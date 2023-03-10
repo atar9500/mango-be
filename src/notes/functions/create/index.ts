@@ -7,7 +7,7 @@ export default {
   role: {'Fn::GetAtt': ['CreateNoteRole', 'Arn']},
   events: [
     {
-      http: {
+      httpApi: {
         method: 'put',
         path: 'note',
         request: {

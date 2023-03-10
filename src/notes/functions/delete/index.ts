@@ -7,7 +7,7 @@ export default {
   role: {'Fn::GetAtt': ['DeleteNoteRole', 'Arn']},
   events: [
     {
-      http: {
+      httpApi: {
         method: 'delete',
         path: 'note',
         request: {
