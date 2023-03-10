@@ -1,10 +1,9 @@
 const schema = {
   type: 'object',
   properties: {
-    phoneNumber: {type: 'string'},
-    otp: {type: 'string'},
+    code: {type: 'string'},
   },
-  required: ['phoneNumber', 'otp'],
+  required: ['code'],
 } as const;
 
 export default schema;

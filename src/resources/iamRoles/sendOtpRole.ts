@@ -14,14 +14,14 @@ export const SendOtpRole = {
     },
     Policies: [
       {
-        PolicyName: 'sendOtp',
+        PolicyName: 'CheckOptedOutPhoneNumber',
         PolicyDocument: {
           Version: '2012-10-17',
           Statement: [
             {
-              Sid: 'LambdaSnsPublishPermissions',
+              Sid: 'LambdaSnsPermissions',
               Effect: 'Allow',
-              Action: ['SNS:Publish', 'SNS:CheckIfPhoneNumberIsOptedOut'],
+              Action: ['SNS:CheckIfPhoneNumberIsOptedOut'],
               Resource: ['*'],
             },
           ],
@@ -33,10 +33,13 @@ export const SendOtpRole = {
           Version: '2012-10-17',
           Statement: [
             {
-              Sid: 'LambdaDynamoDbWritePermissions',
+              Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
-              Action: ['dynamodb:PutItem'],
-              Resource: [{'Fn::GetAtt': ['OtpTable', 'Arn']}],
+              Action: [
+                'cognito-idp:UpdateUserAttributes',
+                'cognito-idp:GetUserAttributeVerificationCode',
+              ],
+              Resource: [{'Fn::GetAtt': ['CognitoUserPool', 'Arn']}],
             },
           ],
         },

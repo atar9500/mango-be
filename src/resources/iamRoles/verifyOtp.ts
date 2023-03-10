@@ -14,28 +14,14 @@ export const VerifyOtpRole = {
     },
     Policies: [
       {
-        PolicyName: 'verifyOtp',
-        PolicyDocument: {
-          Version: '2012-10-17',
-          Statement: [
-            {
-              Sid: 'LambdaDyanmodbReadPermissions',
-              Effect: 'Allow',
-              Action: ['dynamodb:GetItem', 'dynamodb:DeleteItem'],
-              Resource: {'Fn::GetAtt': ['OtpTable', 'Arn']},
-            },
-          ],
-        },
-      },
-      {
         PolicyName: 'setPhoneNumber',
         PolicyDocument: {
           Version: '2012-10-17',
           Statement: [
             {
-              Sid: 'LambdaCognitoWritePermissions',
+              Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
-              Action: ['cognito-idp:UpdateUserAttributes'],
+              Action: ['cognito-idp:verifyUserAttribute'],
               Resource: {'Fn::GetAtt': ['CognitoUserPool', 'Arn']},
             },
           ],
