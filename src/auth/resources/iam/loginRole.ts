@@ -1,7 +1,7 @@
-export const VerifyOtpRole = {
+export const LoginRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
-    RoleName: '${env:SERVICE}-verifyOtpRole',
+    RoleName: '${env:SERVICE}-loginRole',
     AssumeRolePolicyDocument: {
       Version: '2012-10-17',
       Statement: [
@@ -14,15 +14,15 @@ export const VerifyOtpRole = {
     },
     Policies: [
       {
-        PolicyName: 'setPhoneNumber',
+        PolicyName: 'login',
         PolicyDocument: {
           Version: '2012-10-17',
           Statement: [
             {
               Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
-              Action: ['cognito-idp:verifyUserAttribute'],
-              Resource: {'Fn::GetAtt': ['CognitoUserPool', 'Arn']},
+              Action: ['cognito-idp:adminInitiateAuth'],
+              Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
             },
           ],
         },

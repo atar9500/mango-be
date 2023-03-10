@@ -7,8 +7,8 @@
     "lint": "eslint .",
     "init-env": "bash ./scripts/init_env.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "yarn liint && sls deploy",
-    "redeploy": "yarn liint && sls remove && sls deploy"
+    "deploy": "yarn lint && sls deploy",
+    "redeploy": "yarn lint && sls remove && sls deploy"
   },
   "engines": {
     "node": ">=14.15.0"

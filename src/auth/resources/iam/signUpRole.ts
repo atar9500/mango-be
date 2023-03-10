@@ -1,7 +1,7 @@
-export const ConfirmSignUpRole = {
+export const SignUpRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
-    RoleName: '${env:SERVICE}-confirmSignUpRole',
+    RoleName: '${env:SERVICE}-signUpRole',
     AssumeRolePolicyDocument: {
       Version: '2012-10-17',
       Statement: [
@@ -14,18 +14,15 @@ export const ConfirmSignUpRole = {
     },
     Policies: [
       {
-        PolicyName: 'login',
+        PolicyName: 'signUpUser',
         PolicyDocument: {
           Version: '2012-10-17',
           Statement: [
             {
               Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
-              Action: [
-                'cognito-idp:respondToAuthChallenge',
-                'cognito-idp:adminUpdateUserAttributes',
-              ],
-              Resource: [{'Fn::GetAtt': ['CognitoUserPool', 'Arn']}],
+              Action: ['cognito-idp:adminCreateUser'],
+              Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
             },
           ],
         },

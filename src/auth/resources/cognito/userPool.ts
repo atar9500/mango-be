@@ -1,6 +1,6 @@
 const USER_POOL_NAME = '${env:SERVICE}-user_pool';
 
-export const CognitoUserPool = {
+export const UserPool = {
   Type: 'AWS::Cognito::UserPool',
   Properties: {
     UserPoolName: USER_POOL_NAME,

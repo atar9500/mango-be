@@ -39,7 +39,7 @@ export const SendOtpRole = {
                 'cognito-idp:UpdateUserAttributes',
                 'cognito-idp:GetUserAttributeVerificationCode',
               ],
-              Resource: [{'Fn::GetAtt': ['CognitoUserPool', 'Arn']}],
+              Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
             },
           ],
         },

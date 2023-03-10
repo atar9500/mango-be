@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type {AWS} from '@serverless/typescript';
 
-import * as functions from '~/functions';
-import * as dynamoDb from '~/resources/dynamoDb';
-import * as cognito from '~/resources/cognito';
-import * as sns from '~/resources/sns';
-import * as iamRoles from '~/resources/iamRoles';
+import * as authFunctions from '~/auth/functions';
+import * as authResources from '~/auth/resources';
+import * as notesFunctions from '~/notes/functions';
+import * as notesResources from '~/notes/resources';
 
 const serverlessConfiguration: AWS = {
   useDotenv: true,
@@ -25,16 +24,16 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       NOTES_TABLE: '${env:SERVICE}-notes_table',
-      USER_POOL_ID: {Ref: 'CognitoUserPool'},
-      USER_POOL_CLIENT_ID: {Ref: 'CognitoUserPoolClient'},
+      USER_POOL_ID: {Ref: 'UserPool'},
+      USER_POOL_CLIENT_ID: {Ref: 'UserPoolClient'},
       SECRET: '$:env:SECRET',
     },
   },
   resources: {
-    Resources: {...dynamoDb, ...cognito, ...sns, ...iamRoles},
+    Resources: {...authResources, ...notesResources},
   },
   // import the function via paths
-  functions,
+  functions: {...authFunctions, ...notesFunctions},
   package: {individually: true},
   custom: {
     esbuild: {
