@@ -4,11 +4,11 @@
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "serverless deploy",
-    "redeploy": "serverless remove && serverless deploy",
     "lint": "eslint .",
-    "init-env": "bash ./scripts/init_env.sh"
+    "init-env": "bash ./scripts/init_env.sh",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "yarn liint && sls deploy",
+    "redeploy": "yarn liint && sls remove && sls deploy"
   },
   "engines": {
     "node": ">=14.15.0"

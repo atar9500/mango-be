@@ -7,7 +7,7 @@ import {
   dynamoDBIAMRoles,
   notesTableName,
 } from '~/resources/dyanmoDb';
-import {cognitoIAMRoles, cognitoResources} from '~/resources/cognito';
+import * as cognito from '~/resources/cognito';
 import * as sns from '~/resources/sns';
 import * as iamRoles from '~/resources/iamRoles';
 
@@ -33,12 +33,12 @@ const serverlessConfiguration: AWS = {
       USER_POOL_CLIENT_ID: {Ref: 'CognitoUserPoolClient'},
       SECRET: '$:env:SECRET',
     },
-    iamRoleStatements: [...cognitoIAMRoles, ...dynamoDBIAMRoles],
+    iamRoleStatements: [...dynamoDBIAMRoles],
   },
   resources: {
     Resources: {
       ...dynamoDBResources,
-      ...cognitoResources,
+      ...cognito,
       ...sns,
       ...iamRoles,
     },

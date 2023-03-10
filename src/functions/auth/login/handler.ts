@@ -9,9 +9,9 @@ import Schema from './schema';
 
 const cognito = new CognitoIdentityServiceProvider();
 
-type LoginUserLambda = APIGatewayHandler<typeof Schema>;
+type LoginLambda = APIGatewayHandler<typeof Schema>;
 
-const loginUser: LoginUserLambda = async event => {
+const login: LoginLambda = async event => {
   const {AuthenticationResult, ...response} = await cognito
     .adminInitiateAuth({
       AuthFlow: 'ADMIN_NO_SRP_AUTH',
@@ -37,4 +37,4 @@ const loginUser: LoginUserLambda = async event => {
   return formatJSONResponse(response);
 };
 
-export const main = middyfy(loginUser);
+export const main = middyfy(login);

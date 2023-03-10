@@ -4,6 +4,7 @@ import schema from './schema';
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
+  role: {'Fn::GetAtt': ['ConfirmSignUpRole', 'Arn']},
   events: [
     {
       http: {
