@@ -35,7 +35,7 @@ export const CognitoUserPool = {
       AttributesRequireVerificationBeforeUpdate: ['phone_number'],
     },
     SmsConfiguration: {
-      SnsCallerArn: {'Fn::GetAtt': ['SMSAuthIAMRole', 'Arn']},
+      SnsCallerArn: {'Fn::GetAtt': ['SMSAuthRole', 'Arn']},
       ExternalId: '${env:SMS_AUTH_EXTERNAL_ID}',
       SnsRegion: '${env:REGION}',
     },

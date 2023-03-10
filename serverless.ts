@@ -8,7 +8,7 @@ import {
   notesTableName,
 } from '~/resources/dyanmoDb';
 import {cognitoIAMRoles, cognitoResources} from '~/resources/cognito';
-import {SNSResources} from '~/resources/sns';
+import * as sns from '~/resources/sns';
 import * as iamRoles from '~/resources/iamRoles';
 
 const serverlessConfiguration: AWS = {
@@ -39,7 +39,7 @@ const serverlessConfiguration: AWS = {
     Resources: {
       ...dynamoDBResources,
       ...cognitoResources,
-      ...SNSResources,
+      ...sns,
       ...iamRoles,
     },
   },

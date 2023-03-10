@@ -7,38 +7,3 @@ export const SMSAuthService = {
     TopicName: TOPIC_NAME,
   },
 };
-
-export const SMSAuthIAMRole = {
-  Type: 'AWS::IAM::Role',
-  Properties: {
-    RoleName: `${TOPIC_NAME}-role`,
-    AssumeRolePolicyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Effect: 'Allow',
-          Principal: {Service: 'cognito-idp.amazonaws.com'},
-          Action: ['sts:AssumeRole'],
-          Condition: {
-            StringEquals: {'sts:ExternalId': '${env:SMS_AUTH_EXTERNAL_ID}'},
-          },
-        },
-      ],
-    },
-    Policies: [
-      {
-        PolicyName: `${TOPIC_NAME}-policy`,
-        PolicyDocument: {
-          Version: '2012-10-17',
-          Statement: [
-            {
-              Effect: 'Allow',
-              Action: ['SNS:Publish', 'SNS:CheckIfPhoneNumberIsOptedOut'],
-              Resource: ['*'],
-            },
-          ],
-        },
-      },
-    ],
-  },
-};
