@@ -2,9 +2,15 @@
 import type {AWS} from '@serverless/typescript';
 
 import * as functions from '~/functions';
-import {dynamoDBResources, dynamoDBIAMRoles} from '~/resources/dyanmoDb';
+import {
+  dynamoDBResources,
+  dynamoDBIAMRoles,
+  otpTableName,
+  notesTableName,
+} from '~/resources/dyanmoDb';
 import {cognitoIAMRoles, cognitoResources} from '~/resources/cognito';
 import {SNSResources} from '~/resources/sns';
+import * as iamRoles from '~/resources/iamRoles';
 
 const serverlessConfiguration: AWS = {
   useDotenv: true,
@@ -23,23 +29,20 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      NOTES_TABLE: '${env:SERVICE}-notes_table',
-      OTP_TABLE: '${env:SERVICE}-otp-table',
+      NOTES_TABLE: notesTableName,
+      OTP_TABLE: otpTableName,
       USER_POOL_ID: {Ref: 'CognitoUserPool'},
       USER_POOL_CLIENT_ID: {Ref: 'CognitoUserPoolClient'},
       SECRET: '$:env:SECRET',
     },
-    iam: {
-      role: {
-        statements: [...cognitoIAMRoles, ...dynamoDBIAMRoles],
-      },
-    },
+    iamRoleStatements: [...cognitoIAMRoles, ...dynamoDBIAMRoles],
   },
   resources: {
     Resources: {
       ...dynamoDBResources,
       ...cognitoResources,
       ...SNSResources,
+      ...iamRoles,
     },
   },
   // import the function via paths

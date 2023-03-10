@@ -1,10 +1,10 @@
-const TABLE_NAME = '${env:SERVICE}-notes_table';
+export const notesTableName = '${env:SERVICE}-notes_table';
 
 export const NotesTable = {
   Type: 'AWS::DynamoDB::Table',
   DeletionPolicy: 'Delete',
   Properties: {
-    TableName: TABLE_NAME,
+    TableName: notesTableName,
     AttributeDefinitions: [
       {AttributeName: 'authorId', AttributeType: 'S'},
       {AttributeName: 'id', AttributeType: 'S'},

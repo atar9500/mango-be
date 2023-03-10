@@ -1,10 +1,10 @@
-const TABLE_NAME = '${env:SERVICE}-opt_table';
+export const otpTableName = '${env:SERVICE}-otp_table';
 
 export const OtpTable = {
   Type: 'AWS::DynamoDB::Table',
   DeletionPolicy: 'Delete',
   Properties: {
-    TableName: TABLE_NAME,
+    TableName: otpTableName,
     AttributeDefinitions: [{AttributeName: 'hash', AttributeType: 'S'}],
     KeySchema: [{AttributeName: 'hash', KeyType: 'HASH'}],
     ProvisionedThroughput: {
