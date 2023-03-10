@@ -58,7 +58,7 @@ const verifyOtp: VerifyOtpLambda = async event => {
     return formatJSONResponse({}, {statusCode: 400});
   }
 
-  await markAsVerified(Authorization, phoneNumber);
+  await markAsVerified(token, phoneNumber);
 
   return formatJSONResponse({});
 };

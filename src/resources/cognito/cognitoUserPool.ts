@@ -24,7 +24,7 @@ export const CognitoUserPool = {
         RequireLowercase: true,
         RequireSymbols: true,
         RequireNumbers: true,
-        MinimumLength: 8,
+        MinimumLength: 12,
         RequireUppercase: true,
       },
     },
