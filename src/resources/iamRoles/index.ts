@@ -1,3 +1,3 @@
 export * from './sendOtpRole';
-export * from './verifyOtp';
+export * from './verifyOtpRole';
 export * from './smsAuthRole';
