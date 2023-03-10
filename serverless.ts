@@ -2,11 +2,7 @@
 import type {AWS} from '@serverless/typescript';
 
 import * as functions from '~/functions';
-import {
-  dynamoDBResources,
-  dynamoDBIAMRoles,
-  notesTableName,
-} from '~/resources/dyanmoDb';
+import * as dynamoDb from '~/resources/dynamoDb';
 import * as cognito from '~/resources/cognito';
 import * as sns from '~/resources/sns';
 import * as iamRoles from '~/resources/iamRoles';
@@ -28,20 +24,14 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      NOTES_TABLE: notesTableName,
+      NOTES_TABLE: '${env:SERVICE}-notes_table',
       USER_POOL_ID: {Ref: 'CognitoUserPool'},
       USER_POOL_CLIENT_ID: {Ref: 'CognitoUserPoolClient'},
       SECRET: '$:env:SECRET',
     },
-    iamRoleStatements: [...dynamoDBIAMRoles],
   },
   resources: {
-    Resources: {
-      ...dynamoDBResources,
-      ...cognito,
-      ...sns,
-      ...iamRoles,
-    },
+    Resources: {...dynamoDb, ...cognito, ...sns, ...iamRoles},
   },
   // import the function via paths
   functions,
