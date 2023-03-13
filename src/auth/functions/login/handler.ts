@@ -30,6 +30,7 @@ const login: LoginLambda = async event => {
       headers: {
         'Access-Token': AuthenticationResult.AccessToken,
         'Refresh-Token': AuthenticationResult.RefreshToken,
+        'Id-Token': AuthenticationResult.IdToken,
       },
     });
   }

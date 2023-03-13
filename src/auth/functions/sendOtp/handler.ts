@@ -47,7 +47,7 @@ const sendOtp: SendOtpLambda = async event => {
     return formatJSONResponse({}, {statusCode: 400});
   }
 
-  const accessToken = extractBearerToken(event.headers.Authorization);
+  const accessToken = extractBearerToken(event.headers['Access-Token']);
   await savePhoneNumber(event.body.phoneNumber, accessToken);
   await generateOtp(accessToken);
 

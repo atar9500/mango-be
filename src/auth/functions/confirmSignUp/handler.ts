@@ -39,6 +39,7 @@ const loginUser: LoginUserLambda = async event => {
       headers: {
         'Access-Token': AuthenticationResult.AccessToken,
         'Refresh-Token': AuthenticationResult.RefreshToken,
+        'Id-Token': AuthenticationResult.IdToken,
       },
     });
   }

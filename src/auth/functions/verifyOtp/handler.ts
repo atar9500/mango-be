@@ -12,7 +12,7 @@ const cognito = new CognitoIdentityServiceProvider();
 type VerifyOtpLambda = APIGatewayHandler<typeof Schema>;
 
 const verifyOtp: VerifyOtpLambda = async event => {
-  const accessToken = extractBearerToken(event.headers.Authorization);
+  const accessToken = extractBearerToken(event.headers['Access-Token']);
 
   await cognito
     .verifyUserAttribute({
