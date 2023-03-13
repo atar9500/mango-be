@@ -4,8 +4,9 @@ const schema = {
     title: {type: 'string'},
     content: {type: 'string'},
     color: {type: 'string'},
+    archived: {type: 'boolean'},
   },
-  required: ['title', 'color', 'content'],
+  required: ['title', 'color'],
 } as const;
 
 export default schema;
