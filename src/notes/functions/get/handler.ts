@@ -4,6 +4,7 @@ import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import {middyfy} from '~/shared/libs/lambda';
 import decodeIdToken from '~/shared/utils/decodeIdToken';
+import {Note} from '~/shared/types/note';
 
 const db = new DynamoDB.DocumentClient();
 
@@ -22,7 +23,9 @@ const getNotes: GetNotesLambda = async event => {
     })
     .promise();
 
-  return formatJSONResponse(results.Items);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const notes = (results.Items as Note[]).map(({author, ...note}) => note);
+  return formatJSONResponse(notes);
 };
 
 export const main = middyfy(getNotes);

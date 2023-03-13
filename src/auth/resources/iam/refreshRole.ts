@@ -1,7 +1,7 @@
-export const LoginRole = {
+export const RefreshRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
-    RoleName: '${env:SERVICE}-loginRole',
+    RoleName: '${env:SERVICE}-refreshRole',
     AssumeRolePolicyDocument: {
       Version: '2012-10-17',
       Statement: [
@@ -14,14 +14,14 @@ export const LoginRole = {
     },
     Policies: [
       {
-        PolicyName: 'login',
+        PolicyName: 'refresh',
         PolicyDocument: {
           Version: '2012-10-17',
           Statement: [
             {
               Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
-              Action: ['cognito-idp:AdminInitiateAuth'],
+              Action: ['cognito-idp:InitiateAuth'],
               Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
             },
           ],

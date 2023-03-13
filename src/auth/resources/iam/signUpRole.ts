@@ -21,7 +21,7 @@ export const SignUpRole = {
             {
               Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
-              Action: ['cognito-idp:adminCreateUser'],
+              Action: ['cognito-idp:AdminCreateUser'],
               Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
             },
           ],

@@ -21,7 +21,7 @@ export const VerifyOtpRole = {
             {
               Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
-              Action: ['cognito-idp:verifyUserAttribute'],
+              Action: ['cognito-idp:VerifyUserAttribute'],
               Resource: {'Fn::GetAtt': ['UserPool', 'Arn']},
             },
           ],

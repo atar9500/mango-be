@@ -22,8 +22,8 @@ export const ConfirmSignUpRole = {
               Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
               Action: [
-                'cognito-idp:respondToAuthChallenge',
-                'cognito-idp:adminUpdateUserAttributes',
+                'cognito-idp:RespondToAuthChallenge',
+                'cognito-idp:AdminUpdateUserAttributes',
               ],
               Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
             },
