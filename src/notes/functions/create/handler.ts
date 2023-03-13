@@ -18,14 +18,16 @@ const createNote: CreationLambda = async event => {
 
   const currentTime = Date.now();
   const note = {
-    author: user.id,
     id: randomUUID(),
     createdAt: currentTime,
     modifiedAt: currentTime,
+    archived: false,
     ...event.body,
   };
 
-  await db.put({TableName: process.env.NOTES_TABLE, Item: note}).promise();
+  await db
+    .put({TableName: process.env.NOTES_TABLE, Item: {author: user.id, ...note}})
+    .promise();
 
   return formatJSONResponse(note);
 };

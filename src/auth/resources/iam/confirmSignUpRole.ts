@@ -1,3 +1,5 @@
+import {loggingPolicy} from '~/shared/resources/policies';
+
 export const ConfirmSignUpRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
@@ -30,6 +32,7 @@ export const ConfirmSignUpRole = {
           ],
         },
       },
+      loggingPolicy,
     ],
   },
 };

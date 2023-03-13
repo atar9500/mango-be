@@ -1,3 +1,5 @@
+import {loggingPolicy} from '~/shared/resources/policies';
+
 export const LoginRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
@@ -27,6 +29,7 @@ export const LoginRole = {
           ],
         },
       },
+      loggingPolicy,
     ],
   },
 };

@@ -1,3 +1,5 @@
+import {loggingPolicy} from '~/shared/resources/policies';
+
 export const EditNoteRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
@@ -27,6 +29,7 @@ export const EditNoteRole = {
           ],
         },
       },
+      loggingPolicy,
     ],
   },
 };

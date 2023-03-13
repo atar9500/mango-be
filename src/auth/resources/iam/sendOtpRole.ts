@@ -1,3 +1,5 @@
+import {loggingPolicy} from '~/shared/resources/policies';
+
 export const SendOtpRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
@@ -44,6 +46,7 @@ export const SendOtpRole = {
           ],
         },
       },
+      loggingPolicy,
     ],
   },
 };
