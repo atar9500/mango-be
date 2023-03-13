@@ -5,9 +5,8 @@ const schema = {
     title: {type: 'string'},
     content: {type: 'string'},
     color: {type: 'string'},
-    authorId: {type: 'string'},
   },
-  required: ['id', 'authorId'],
+  required: ['id'],
 } as const;
 
 export default schema;

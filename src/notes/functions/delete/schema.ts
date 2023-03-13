@@ -2,9 +2,8 @@ const schema = {
   type: 'object',
   properties: {
     id: {type: 'string'},
-    authorId: {type: 'string'},
   },
-  required: ['id', 'authorId'],
+  required: ['id'],
 } as const;
 
 export default schema;

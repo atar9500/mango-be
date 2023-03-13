@@ -4,11 +4,11 @@ export const NotesTable = {
   Properties: {
     TableName: '${env:SERVICE}-notes_table',
     AttributeDefinitions: [
-      {AttributeName: 'authorId', AttributeType: 'S'},
+      {AttributeName: 'author', AttributeType: 'S'},
       {AttributeName: 'id', AttributeType: 'S'},
     ],
     KeySchema: [
-      {AttributeName: 'authorId', KeyType: 'HASH'},
+      {AttributeName: 'author', KeyType: 'HASH'},
       {AttributeName: 'id', KeyType: 'RANGE'},
     ],
     ProvisionedThroughput: {
