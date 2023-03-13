@@ -7,13 +7,17 @@ export default {
   role: {'Fn::GetAtt': ['DeleteNoteRole', 'Arn']},
   events: [
     {
-      httpApi: {
+      http: {
         method: 'delete',
         path: 'note',
         request: {
           schemas: {
             'application/json': schema,
           },
+        },
+        authorizer: {
+          type: 'COGNITO_USER_POOLS',
+          authorizerId: {Ref: 'CognitoAuthorizer'},
         },
       },
     },

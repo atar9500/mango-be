@@ -7,7 +7,7 @@ export default {
   role: {'Fn::GetAtt': ['VerifyOtpRole', 'Arn']},
   events: [
     {
-      httpApi: {
+      http: {
         method: 'post',
         path: 'auth/verifyOtp',
         cors: true,

@@ -7,13 +7,17 @@ export default {
   role: {'Fn::GetAtt': ['EditNoteRole', 'Arn']},
   events: [
     {
-      httpApi: {
+      http: {
         method: 'post',
         path: 'note',
         request: {
           schemas: {
             'application/json': schema,
           },
+        },
+        authorizer: {
+          type: 'COGNITO_USER_POOLS',
+          authorizerId: {Ref: 'CognitoAuthorizer'},
         },
       },
     },

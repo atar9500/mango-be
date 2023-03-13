@@ -5,6 +5,7 @@ import * as authFunctions from '~/auth/functions';
 import * as authResources from '~/auth/resources';
 import * as notesFunctions from '~/notes/functions';
 import * as notesResources from '~/notes/resources';
+import * as sharedResources from '~/shared/resources';
 
 const serverlessConfiguration: AWS = {
   useDotenv: true,
@@ -30,7 +31,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   resources: {
-    Resources: {...authResources, ...notesResources},
+    Resources: {...authResources, ...notesResources, ...sharedResources},
   },
   // import the function via paths
   functions: {...authFunctions, ...notesFunctions},

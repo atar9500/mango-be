@@ -7,7 +7,7 @@ export default {
   role: {'Fn::GetAtt': ['ConfirmSignUpRole', 'Arn']},
   events: [
     {
-      httpApi: {
+      http: {
         method: 'post',
         path: 'auth/confirmSignUp',
         cors: true,
