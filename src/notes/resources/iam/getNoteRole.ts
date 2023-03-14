@@ -26,6 +26,12 @@ export const GetNotesRole = {
               Action: ['dynamodb:Query'],
               Resource: [{'Fn::GetAtt': ['NotesTable', 'Arn']}],
             },
+            {
+              Sid: 'LambdaS3WritePermissions',
+              Effect: 'Allow',
+              Action: ['s3:GetObject'],
+              Resource: [{'Fn::GetAtt': ['NotesBucket', 'Arn']}],
+            },
           ],
         },
       },

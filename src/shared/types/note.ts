@@ -1,8 +1,8 @@
 export type Note = {
   id: string;
-  author: string;
   title: string;
   content?: string;
+  snippet?: string;
   color: string;
   modifiedAt: number;
   createdAt: number;

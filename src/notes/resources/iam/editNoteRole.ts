@@ -26,6 +26,19 @@ export const EditNoteRole = {
               Action: ['dynamodb:UpdateItem'],
               Resource: [{'Fn::GetAtt': ['NotesTable', 'Arn']}],
             },
+            {
+              Sid: 'LambdaS3WritePermissions',
+              Effect: 'Allow',
+              Action: ['s3:PutObject'],
+              Resource: [
+                {
+                  'Fn::Join': [
+                    '',
+                    [{'Fn::GetAtt': ['NotesBucket', 'Arn']}, '/*'],
+                  ],
+                },
+              ],
+            },
           ],
         },
       },

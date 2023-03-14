@@ -26,6 +26,19 @@ export const DeleteNoteRole = {
               Action: ['dynamodb:DeleteItem'],
               Resource: [{'Fn::GetAtt': ['NotesTable', 'Arn']}],
             },
+            {
+              Sid: 'LambdaS3WritePermissions',
+              Effect: 'Allow',
+              Action: ['s3:DeleteObject'],
+              Resource: [
+                {
+                  'Fn::Join': [
+                    '',
+                    [{'Fn::GetAtt': ['NotesBucket', 'Arn']}, '/*'],
+                  ],
+                },
+              ],
+            },
           ],
         },
       },

@@ -1,4 +1,4 @@
-import {DynamoDB} from 'aws-sdk';
+import {DynamoDB, S3} from 'aws-sdk';
 
 import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
@@ -9,6 +9,7 @@ import decodeIdToken from '~/shared/utils/decodeIdToken';
 import Schema from './schema';
 
 const db = new DynamoDB.DocumentClient();
+const s3 = new S3();
 
 type EditNoteLambda = APIGatewayHandler<typeof Schema>;
 
@@ -19,13 +20,33 @@ const editNote: EditNoteLambda = async event => {
   const {id, ...rest} = event.body;
   const note = {modifiedAt: currentTime, ...rest};
 
+  const {ExpressionAttributeValues, ...updateParams} = getUpdateParams(note);
+
   await db
     .update({
       TableName: process.env.NOTES_TABLE,
       Key: {id, author: user.id},
-      ...getUpdateParams(note),
+      ConditionExpression: 'id = :id AND author = :author',
+      ExpressionAttributeValues: {
+        ':id': id,
+        ':author': user.id,
+        ...ExpressionAttributeValues,
+      },
+      ...updateParams,
     })
     .promise();
+
+  if (event.body.content) {
+    await s3
+      .putObject({
+        Bucket: process.env.NOTES_BUCKET,
+        Key: `${user.id}/${id}.html`,
+        Body: event.body.content,
+        ContentType: 'text/html',
+        Metadata: {type: 'html', author: user.id, id},
+      })
+      .promise();
+  }
 
   return formatJSONResponse({...note, id});
 };
