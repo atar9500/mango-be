@@ -2,7 +2,7 @@ import {CognitoIdentityServiceProvider} from 'aws-sdk';
 
 import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
-import {middyfy} from '~/shared/libs/lambda';
+import middyfyLambda from '~/shared/middlewares/middyfyLambda';
 
 import Schema from './schema';
 
@@ -21,4 +21,4 @@ const forgotPassword: ForgotPasswordLambda = async event => {
   return formatJSONResponse({});
 };
 
-export const main = middyfy(forgotPassword);
+export const main = middyfyLambda(forgotPassword);

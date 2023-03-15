@@ -1,16 +1,15 @@
 import {SNS, CognitoIdentityServiceProvider} from 'aws-sdk';
 
-import type {APIGatewayHandler} from '~/shared/types/apiGateway';
+import type {AuthorizedAPIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
-import {middyfy} from '~/shared/libs/lambda';
-import extractBearerToken from '~/shared/utils/extractBearerToken';
+import middyfyLambda from '~/shared/middlewares/middyfyLambda';
 
 import Schema from './schema';
 
 const cognito = new CognitoIdentityServiceProvider();
 const sns = new SNS();
 
-type SendOtpLambda = APIGatewayHandler<typeof Schema>;
+type SendOtpLambda = AuthorizedAPIGatewayHandler<typeof Schema>;
 
 const isNumberOptedOut = async (phoneNumber: string) => {
   const response = await sns
@@ -32,16 +31,15 @@ const generateOtp = async (accessToken: string) => {
   }
 };
 
-const sendOtp: SendOtpLambda = async event => {
-  const optedOut = await isNumberOptedOut(event.body.phoneNumber);
+const sendOtp: SendOtpLambda = async ({body, accessToken}) => {
+  const optedOut = await isNumberOptedOut(body.phoneNumber);
   if (optedOut) {
     return formatJSONResponse({}, {statusCode: 400});
   }
 
-  const accessToken = extractBearerToken(event.headers['Access-Token']);
   await generateOtp(accessToken);
 
   return formatJSONResponse({});
 };
 
-export const main = middyfy(sendOtp);
+export const main = middyfyLambda(sendOtp, {authorized: true});

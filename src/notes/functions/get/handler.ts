@@ -1,9 +1,8 @@
 import {DynamoDB} from 'aws-sdk';
 
-import type {APIGatewayHandler} from '~/shared/types/apiGateway';
+import type {AuthorizedAPIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
-import {middyfy} from '~/shared/libs/lambda';
-import decodeIdToken from '~/shared/utils/decodeIdToken';
+import middyfyLambda from '~/shared/middlewares/middyfyLambda';
 
 const db = new DynamoDB.DocumentClient();
 
@@ -13,7 +12,7 @@ type GetNotesParams = {
   archived?: string;
 };
 
-type GetNotesLambda = APIGatewayHandler<unknown, GetNotesParams>;
+type GetNotesLambda = AuthorizedAPIGatewayHandler<unknown, GetNotesParams>;
 
 const getFilterExpression = (params?: Record<string, string>) => {
   const filterExpression = Object.keys(params || {}).reduce<string>(
@@ -29,22 +28,19 @@ const getFilterExpression = (params?: Record<string, string>) => {
   return filterExpression || undefined;
 };
 
-const getNotes: GetNotesLambda = async event => {
-  const user = decodeIdToken(event.headers.Authorization);
-  const params = event.queryStringParameters;
-
+const getNotes: GetNotesLambda = async ({queryStringParameters, user}) => {
   const results = await db
     .query({
       TableName: process.env.NOTES_TABLE,
       KeyConditionExpression: 'author = :author',
-      FilterExpression: getFilterExpression(params),
+      FilterExpression: getFilterExpression(queryStringParameters),
       ProjectionExpression:
         'id, title, content, color, archived, createdAt, modifiedAt',
       ExpressionAttributeValues: {
         ':author': user.id,
-        ':title': params?.title,
-        ':content': params?.content,
-        ':archived': params?.archived,
+        ':title': queryStringParameters?.title,
+        ':content': queryStringParameters?.content,
+        ':archived': queryStringParameters?.archived,
       },
     })
     .promise();
@@ -52,4 +48,4 @@ const getNotes: GetNotesLambda = async event => {
   return formatJSONResponse(results.Items);
 };
 
-export const main = middyfy(getNotes);
+export const main = middyfyLambda(getNotes, {authorized: true});

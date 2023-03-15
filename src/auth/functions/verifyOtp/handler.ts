@@ -1,28 +1,25 @@
 import {CognitoIdentityServiceProvider} from 'aws-sdk';
 
-import type {APIGatewayHandler} from '~/shared/types/apiGateway';
+import type {AuthorizedAPIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
-import {middyfy} from '~/shared/libs/lambda';
-import extractBearerToken from '~/shared/utils/extractBearerToken';
+import middyfyLambda from '~/shared/middlewares/middyfyLambda';
 
 import Schema from './schema';
 
 const cognito = new CognitoIdentityServiceProvider();
 
-type VerifyOtpLambda = APIGatewayHandler<typeof Schema>;
+type VerifyOtpLambda = AuthorizedAPIGatewayHandler<typeof Schema>;
 
-const verifyOtp: VerifyOtpLambda = async event => {
-  const accessToken = extractBearerToken(event.headers['Access-Token']);
-
+const verifyOtp: VerifyOtpLambda = async ({accessToken, body}) => {
   await cognito
     .verifyUserAttribute({
       AccessToken: accessToken,
       AttributeName: 'phone_number',
-      Code: event.body.code,
+      Code: body.code,
     })
     .promise();
 
   return formatJSONResponse({});
 };
 
-export const main = middyfy(verifyOtp);
+export const main = middyfyLambda(verifyOtp, {authorized: true});

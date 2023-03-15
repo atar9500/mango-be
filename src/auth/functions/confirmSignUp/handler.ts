@@ -2,8 +2,8 @@ import {CognitoIdentityServiceProvider} from 'aws-sdk';
 
 import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
-import {middyfy} from '~/shared/libs/lambda';
-import decodeIdToken from '~/shared/utils/decodeIdToken';
+import middyfyLambda from '~/shared/middlewares/middyfyLambda';
+import {parseIdToken} from '~/shared/utils/headerParsers';
 
 import Schema from './schema';
 
@@ -33,7 +33,7 @@ const loginUser: LoginUserLambda = async event => {
       })
       .promise();
 
-    const user = decodeIdToken(AuthenticationResult.IdToken);
+    const user = parseIdToken(AuthenticationResult.IdToken);
 
     return formatJSONResponse(user, {
       headers: {
@@ -47,4 +47,4 @@ const loginUser: LoginUserLambda = async event => {
   return formatJSONResponse(response);
 };
 
-export const main = middyfy(loginUser);
+export const main = middyfyLambda(loginUser);

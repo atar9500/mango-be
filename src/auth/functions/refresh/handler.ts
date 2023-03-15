@@ -1,24 +1,21 @@
 import {CognitoIdentityServiceProvider} from 'aws-sdk';
 
-import type {APIGatewayHandler} from '~/shared/types/apiGateway';
+import type {AuthorizedAPIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
-import {middyfy} from '~/shared/libs/lambda';
-import extractBearerToken from '~/shared/utils/extractBearerToken';
+import middyfyLambda from '~/shared/middlewares/middyfyLambda';
 
 import Schema from './schema';
 
 const cognito = new CognitoIdentityServiceProvider();
 
-type RefreshLambda = APIGatewayHandler<typeof Schema>;
+type RefreshLambda = AuthorizedAPIGatewayHandler<typeof Schema>;
 
-const refresh: RefreshLambda = async event => {
+const refresh: RefreshLambda = async ({refreshToken}) => {
   const {AuthenticationResult, ...response} = await cognito
     .initiateAuth({
       AuthFlow: 'REFRESH_TOKEN_AUTH',
       ClientId: process.env.USER_POOL_CLIENT_ID,
-      AuthParameters: {
-        REFRESH_TOKEN: extractBearerToken(event.headers['Refresh-Token']),
-      },
+      AuthParameters: {REFRESH_TOKEN: refreshToken},
     })
     .promise();
 
@@ -37,4 +34,4 @@ const refresh: RefreshLambda = async event => {
   return formatJSONResponse(response);
 };
 
-export const main = middyfy(refresh);
+export const main = middyfyLambda(refresh, {authorized: true});

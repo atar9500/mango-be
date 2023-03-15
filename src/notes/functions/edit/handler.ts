@@ -1,23 +1,20 @@
 import {DynamoDB, S3} from 'aws-sdk';
 
-import type {APIGatewayHandler} from '~/shared/types/apiGateway';
+import type {AuthorizedAPIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
-import {middyfy} from '~/shared/libs/lambda';
+import middyfyLambda from '~/shared/middlewares/middyfyLambda';
 import getTableUpdateParams from '~/shared/utils/getTableUpdateParams';
-import decodeIdToken from '~/shared/utils/decodeIdToken';
 
 import Schema from './schema';
 
 const db = new DynamoDB.DocumentClient();
 const s3 = new S3();
 
-type EditNoteLambda = APIGatewayHandler<typeof Schema>;
+type EditNoteLambda = AuthorizedAPIGatewayHandler<typeof Schema>;
 
-const editNote: EditNoteLambda = async event => {
-  const user = decodeIdToken(event.headers.Authorization);
-
+const editNote: EditNoteLambda = async ({body, user}) => {
   const currentTime = Date.now();
-  const {id, ...rest} = event.body;
+  const {id, ...rest} = body;
   const note = {modifiedAt: currentTime, ...rest};
 
   const {ExpressionAttributeValues, ...updateParams} =
@@ -37,12 +34,12 @@ const editNote: EditNoteLambda = async event => {
     })
     .promise();
 
-  if (event.body.content) {
+  if (body.content) {
     await s3
       .putObject({
         Bucket: process.env.NOTES_BUCKET,
         Key: `${user.id}/${id}.html`,
-        Body: event.body.content,
+        Body: body.content,
         ContentType: 'text/html',
         Metadata: {type: 'html', author: user.id, id},
       })
@@ -52,4 +49,4 @@ const editNote: EditNoteLambda = async event => {
   return formatJSONResponse({...note, id});
 };
 
-export const main = middyfy(editNote);
+export const main = middyfyLambda(editNote);

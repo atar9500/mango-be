@@ -2,10 +2,9 @@ import {randomUUID} from 'crypto';
 
 import {DynamoDB, S3} from 'aws-sdk';
 
-import type {APIGatewayHandler} from '~/shared/types/apiGateway';
+import type {AuthorizedAPIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
-import decodeIdToken from '~/shared/utils/decodeIdToken';
-import {middyfy} from '~/shared/libs/lambda';
+import middyfyLambda from '~/shared/middlewares/middyfyLambda';
 
 import generateNoteSnippet from '../../utils/generateNoteSnippet';
 import Schema from './schema';
@@ -13,26 +12,24 @@ import Schema from './schema';
 const db = new DynamoDB.DocumentClient();
 const s3 = new S3();
 
-type CreationLambda = APIGatewayHandler<typeof Schema>;
+type CreatNoteLambda = AuthorizedAPIGatewayHandler<typeof Schema>;
 
-const createNote: CreationLambda = async event => {
-  const user = decodeIdToken(event.headers.Authorization);
-
+const createNote: CreatNoteLambda = async ({body, user}) => {
   const currentTime = Date.now();
   const note = {
     id: randomUUID(),
-    snippet: generateNoteSnippet(event.body.content),
+    snippet: generateNoteSnippet(body.content),
     createdAt: currentTime,
     modifiedAt: currentTime,
     archived: false,
-    ...event.body,
+    ...body,
   };
 
   await s3
     .putObject({
       Bucket: process.env.NOTES_BUCKET,
       Key: `${user.id}/${note.id}.html`,
-      Body: event.body.content,
+      Body: body.content,
       ContentType: 'text/html',
       Metadata: {type: 'html', author: user.id, id: note.id},
     })
@@ -45,4 +42,4 @@ const createNote: CreationLambda = async event => {
   return formatJSONResponse(note);
 };
 
-export const main = middyfy(createNote);
+export const main = middyfyLambda(createNote, {authorized: true});
