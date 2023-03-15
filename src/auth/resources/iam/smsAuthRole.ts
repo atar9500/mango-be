@@ -1,5 +1,3 @@
-import {loggingPolicy} from '~/shared/resources/policies';
-
 export const SMSAuthRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
@@ -31,7 +29,6 @@ export const SMSAuthRole = {
           ],
         },
       },
-      loggingPolicy,
     ],
   },
 };
