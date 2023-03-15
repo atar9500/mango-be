@@ -7,6 +7,7 @@ export * from './iam/refreshRole';
 export * from './iam/confirmSignUpRole';
 export * from './iam/forgotPasswordRole';
 export * from './iam/confirmForgotPasswordRole';
+export * from './iam/updateUserDetailsRole';
 
 export * from './cognito/userPoolClient';
 export * from './cognito/userPool';

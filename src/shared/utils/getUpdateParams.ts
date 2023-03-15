@@ -1,28 +1,12 @@
-import {DynamoDB} from 'aws-sdk';
+const camelcaseToUnderscore = (value: string) =>
+  value
+    .replace(/\.?([A-Z])/g, (_substring, memo) => '_' + memo.toLowerCase())
+    .replace(/^_/, '');
 
-type PartialUpdateParams = Partial<DynamoDB.DocumentClient.UpdateItemInput>;
-
-const getUpdateParams = <T = Record<string, unknown>>(
-  params: T
-): PartialUpdateParams => ({
-  UpdateExpression: `set ${Object.entries(params)
-    .map(([key]) => `#${key} = :${key}, `)
-    .reduce((acc, str) => acc + str)
-    .slice(0, -2)}`,
-  ExpressionAttributeNames: Object.keys(params).reduce(
-    (acc, key) => ({
-      ...acc,
-      [`#${key}`]: key,
-    }),
-    {}
-  ),
-  ExpressionAttributeValues: Object.entries(params).reduce(
-    (acc, [key, value]) => ({
-      ...acc,
-      [`:${key}`]: value,
-    }),
-    {}
-  ),
-});
+const getUpdateParams = (data: Record<string, unknown>) =>
+  Object.keys(data).map(key => ({
+    Name: camelcaseToUnderscore(key),
+    Value: `${data[key]}`,
+  }));
 
 export default getUpdateParams;

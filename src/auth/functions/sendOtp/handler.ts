@@ -19,15 +19,6 @@ const isNumberOptedOut = async (phoneNumber: string) => {
   return response.isOptedOut;
 };
 
-const savePhoneNumber = async (phoneNumber: string, accessToken: string) => {
-  await cognito
-    .updateUserAttributes({
-      AccessToken: accessToken,
-      UserAttributes: [{Name: 'phone_number', Value: phoneNumber}],
-    })
-    .promise();
-};
-
 const generateOtp = async (accessToken: string) => {
   try {
     return await cognito
@@ -48,7 +39,6 @@ const sendOtp: SendOtpLambda = async event => {
   }
 
   const accessToken = extractBearerToken(event.headers['Access-Token']);
-  await savePhoneNumber(event.body.phoneNumber, accessToken);
   await generateOtp(accessToken);
 
   return formatJSONResponse({});

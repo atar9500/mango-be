@@ -6,3 +6,4 @@ export {default as sendOtp} from './sendOtp';
 export {default as verifyOtp} from './verifyOtp';
 export {default as forgotPassword} from './forgotPassword';
 export {default as confirmForgotPassword} from './confirmForgotPassword';
+export {default as updateUserDetails} from './updateUserDetails';

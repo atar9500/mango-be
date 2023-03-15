@@ -3,7 +3,7 @@ import {DynamoDB, S3} from 'aws-sdk';
 import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import {middyfy} from '~/shared/libs/lambda';
-import getUpdateParams from '~/shared/utils/getUpdateParams';
+import getTableUpdateParams from '~/shared/utils/getTableUpdateParams';
 import decodeIdToken from '~/shared/utils/decodeIdToken';
 
 import Schema from './schema';
@@ -20,7 +20,8 @@ const editNote: EditNoteLambda = async event => {
   const {id, ...rest} = event.body;
   const note = {modifiedAt: currentTime, ...rest};
 
-  const {ExpressionAttributeValues, ...updateParams} = getUpdateParams(note);
+  const {ExpressionAttributeValues, ...updateParams} =
+    getTableUpdateParams(note);
 
   await db
     .update({

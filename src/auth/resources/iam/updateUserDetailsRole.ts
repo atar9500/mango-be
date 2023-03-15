@@ -1,9 +1,9 @@
 import {loggingPolicy} from '~/shared/resources/policies';
 
-export const ConfirmSignUpRole = {
+export const UpdateUserDetailsRole = {
   Type: 'AWS::IAM::Role',
   Properties: {
-    RoleName: '${env:SERVICE}-confirmSignUpRole',
+    RoleName: '${env:SERVICE}-updateUserDetailsRole',
     AssumeRolePolicyDocument: {
       Version: '2012-10-17',
       Statement: [
@@ -16,17 +16,14 @@ export const ConfirmSignUpRole = {
     },
     Policies: [
       {
-        PolicyName: 'confirmSignUp',
+        PolicyName: 'updateUserDetails',
         PolicyDocument: {
           Version: '2012-10-17',
           Statement: [
             {
               Sid: 'LambdaCognitoPermissions',
               Effect: 'Allow',
-              Action: [
-                'cognito-idp:RespondToAuthChallenge',
-                'cognito-idp:AdminUpdateUserAttributes',
-              ],
+              Action: ['cognito-idp:UpdateUserAttributes'],
               Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
             },
           ],
