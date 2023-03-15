@@ -1,42 +1,22 @@
-import {loggingPolicy} from '~/shared/resources/policies';
+import createLambdaRole from '~/shared/utils/createLambdaRole';
 
-export const GetNoteContentRole = {
-  Type: 'AWS::IAM::Role',
-  Properties: {
-    RoleName: '${env:SERVICE}-getNoteContentRole',
-    AssumeRolePolicyDocument: {
+export const GetNoteContentRole = createLambdaRole('getNoteContent', [
+  {
+    PolicyName: 'getNoteContentNote',
+    PolicyDocument: {
       Version: '2012-10-17',
       Statement: [
         {
+          Sid: 'LambdaS3ReadPermissions',
           Effect: 'Allow',
-          Principal: {Service: 'lambda.amazonaws.com'},
-          Action: 'sts:AssumeRole',
-        },
-      ],
-    },
-    Policies: [
-      {
-        PolicyName: 'getNoteContentNote',
-        PolicyDocument: {
-          Version: '2012-10-17',
-          Statement: [
+          Action: ['s3:GetObject'],
+          Resource: [
             {
-              Sid: 'LambdaS3ReadPermissions',
-              Effect: 'Allow',
-              Action: ['s3:GetObject'],
-              Resource: [
-                {
-                  'Fn::Join': [
-                    '',
-                    [{'Fn::GetAtt': ['NotesBucket', 'Arn']}, '/*'],
-                  ],
-                },
-              ],
+              'Fn::Join': ['', [{'Fn::GetAtt': ['NotesBucket', 'Arn']}, '/*']],
             },
           ],
         },
-      },
-      loggingPolicy,
-    ],
+      ],
+    },
   },
-};
+]);

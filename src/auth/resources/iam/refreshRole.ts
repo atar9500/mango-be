@@ -1,35 +1,18 @@
-import {loggingPolicy} from '~/shared/resources/policies';
+import createLambdaRole from '~/shared/utils/createLambdaRole';
 
-export const RefreshRole = {
-  Type: 'AWS::IAM::Role',
-  Properties: {
-    RoleName: '${env:SERVICE}-refreshRole',
-    AssumeRolePolicyDocument: {
+export const RefreshRole = createLambdaRole('refresh', [
+  {
+    PolicyName: 'refresh',
+    PolicyDocument: {
       Version: '2012-10-17',
       Statement: [
         {
+          Sid: 'LambdaCognitoPermissions',
           Effect: 'Allow',
-          Principal: {Service: 'lambda.amazonaws.com'},
-          Action: 'sts:AssumeRole',
+          Action: ['cognito-idp:InitiateAuth'],
+          Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
         },
       ],
     },
-    Policies: [
-      {
-        PolicyName: 'refresh',
-        PolicyDocument: {
-          Version: '2012-10-17',
-          Statement: [
-            {
-              Sid: 'LambdaCognitoPermissions',
-              Effect: 'Allow',
-              Action: ['cognito-idp:InitiateAuth'],
-              Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
-            },
-          ],
-        },
-      },
-      loggingPolicy,
-    ],
   },
-};
+]);

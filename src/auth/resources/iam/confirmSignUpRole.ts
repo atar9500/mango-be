@@ -1,38 +1,21 @@
-import {loggingPolicy} from '~/shared/resources/policies';
+import createLambdaRole from '~/shared/utils/createLambdaRole';
 
-export const ConfirmSignUpRole = {
-  Type: 'AWS::IAM::Role',
-  Properties: {
-    RoleName: '${env:SERVICE}-confirmSignUpRole',
-    AssumeRolePolicyDocument: {
+export const ConfirmSignUpRole = createLambdaRole('confirmSignUp', [
+  {
+    PolicyName: 'confirmSignUp',
+    PolicyDocument: {
       Version: '2012-10-17',
       Statement: [
         {
+          Sid: 'LambdaCognitoPermissions',
           Effect: 'Allow',
-          Principal: {Service: 'lambda.amazonaws.com'},
-          Action: 'sts:AssumeRole',
+          Action: [
+            'cognito-idp:RespondToAuthChallenge',
+            'cognito-idp:AdminUpdateUserAttributes',
+          ],
+          Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
         },
       ],
     },
-    Policies: [
-      {
-        PolicyName: 'confirmSignUp',
-        PolicyDocument: {
-          Version: '2012-10-17',
-          Statement: [
-            {
-              Sid: 'LambdaCognitoPermissions',
-              Effect: 'Allow',
-              Action: [
-                'cognito-idp:RespondToAuthChallenge',
-                'cognito-idp:AdminUpdateUserAttributes',
-              ],
-              Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
-            },
-          ],
-        },
-      },
-      loggingPolicy,
-    ],
   },
-};
+]);

@@ -1,48 +1,28 @@
-import {loggingPolicy} from '~/shared/resources/policies';
+import createLambdaRole from '~/shared/utils/createLambdaRole';
 
-export const EditNoteRole = {
-  Type: 'AWS::IAM::Role',
-  Properties: {
-    RoleName: '${env:SERVICE}-editNoteRole',
-    AssumeRolePolicyDocument: {
+export const EditNoteRole = createLambdaRole('editNote', [
+  {
+    PolicyName: 'editNote',
+    PolicyDocument: {
       Version: '2012-10-17',
       Statement: [
         {
+          Sid: 'LambdaDynamodbWritePermissions',
           Effect: 'Allow',
-          Principal: {Service: 'lambda.amazonaws.com'},
-          Action: 'sts:AssumeRole',
+          Action: ['dynamodb:UpdateItem'],
+          Resource: [{'Fn::GetAtt': ['NotesTable', 'Arn']}],
         },
-      ],
-    },
-    Policies: [
-      {
-        PolicyName: 'editNote',
-        PolicyDocument: {
-          Version: '2012-10-17',
-          Statement: [
+        {
+          Sid: 'LambdaS3WritePermissions',
+          Effect: 'Allow',
+          Action: ['s3:PutObject'],
+          Resource: [
             {
-              Sid: 'LambdaDynamodbWritePermissions',
-              Effect: 'Allow',
-              Action: ['dynamodb:UpdateItem'],
-              Resource: [{'Fn::GetAtt': ['NotesTable', 'Arn']}],
-            },
-            {
-              Sid: 'LambdaS3WritePermissions',
-              Effect: 'Allow',
-              Action: ['s3:PutObject'],
-              Resource: [
-                {
-                  'Fn::Join': [
-                    '',
-                    [{'Fn::GetAtt': ['NotesBucket', 'Arn']}, '/*'],
-                  ],
-                },
-              ],
+              'Fn::Join': ['', [{'Fn::GetAtt': ['NotesBucket', 'Arn']}, '/*']],
             },
           ],
         },
-      },
-      loggingPolicy,
-    ],
+      ],
+    },
   },
-};
+]);
