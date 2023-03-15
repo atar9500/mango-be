@@ -20,7 +20,7 @@ const deleteNote: DeleteLambda = async event => {
       TableName: process.env.NOTES_TABLE,
       Key: {id: event.body.id, author: user.id},
       ConditionExpression: 'id = :id AND author = :author',
-      ExpressionAttributeNames: {
+      ExpressionAttributeValues: {
         ':id': event.body.id,
         ':author': user.id,
       },
