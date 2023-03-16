@@ -2,8 +2,8 @@ export * from './dynamoDb/notesTable';
 
 export * from './s3/notesBucket';
 
-export * from './iam/createNoteRole';
-export * from './iam/deleteNoteRole';
-export * from './iam/editNoteRole';
-export * from './iam/getNoteRole';
-export * from './iam/getContentRole';
+export * from '../functions/create/role';
+export * from '../functions/delete/role';
+export * from '../functions/edit/role';
+export * from '../functions/get/role';
+export * from '../functions/content/role';
