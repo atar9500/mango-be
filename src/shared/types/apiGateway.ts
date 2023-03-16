@@ -5,13 +5,13 @@ import type {
 } from 'aws-lambda';
 import type {FromSchema} from 'json-schema-to-ts';
 
-import {User} from './user';
+import {UserAuth} from './user';
 
-type QueryParmasDefault = Record<string, string>;
+export type QueryParamsDefault = Record<string, string>;
 
 export type ValidatedAPIGatewayProxyEvent<
   Body = unknown,
-  QueryParams extends QueryParmasDefault = QueryParmasDefault,
+  QueryParams extends QueryParamsDefault = QueryParamsDefault,
 > = Omit<APIGatewayProxyEvent, 'body' | 'queryStringParameters'> & {
   body: FromSchema<Body>;
   queryStringParameters?: QueryParams;
@@ -19,7 +19,7 @@ export type ValidatedAPIGatewayProxyEvent<
 
 export type APIGatewayHandler<
   Body = unknown,
-  QueryParams extends QueryParmasDefault = QueryParmasDefault,
+  QueryParams extends QueryParamsDefault = QueryParamsDefault,
 > = Handler<
   ValidatedAPIGatewayProxyEvent<Body, QueryParams>,
   APIGatewayProxyResult
@@ -27,16 +27,16 @@ export type APIGatewayHandler<
 
 export type AuthorizedAPIGatewayProxyEvent<
   Body = unknown,
-  QueryParams extends QueryParmasDefault = QueryParmasDefault,
+  QueryParams extends QueryParamsDefault = QueryParamsDefault,
 > = ValidatedAPIGatewayProxyEvent<Body, QueryParams> & {
   accessToken: string;
   refreshToken: string;
-  user: User;
+  user: UserAuth;
 };
 
 export type AuthorizedAPIGatewayHandler<
   Body = unknown,
-  QueryParams extends QueryParmasDefault = QueryParmasDefault,
+  QueryParams extends QueryParamsDefault = QueryParamsDefault,
 > = Handler<
   AuthorizedAPIGatewayProxyEvent<Body, QueryParams>,
   APIGatewayProxyResult

@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 
-import {User, UserAuth} from '../types/user';
+import {UserAuth} from '../types/user';
 
 const BEARER_REGEX = /^(Bearer+\s)*([a-zA-Z0-9-_.]+)$/;
 
