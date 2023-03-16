@@ -1,8 +1,8 @@
 const schema = {
   type: 'object',
   properties: {
-    name: {type: 'string'},
-    phoneNumber: {type: 'string'},
+    firstName: {type: 'string'},
+    lastName: {type: 'string'},
   },
 } as const;
 

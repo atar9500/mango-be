@@ -4,9 +4,8 @@ const schema = {
     challengeName: {type: 'string'},
     password: {type: 'string'},
     email: {type: 'string'},
-    session: {type: 'string'},
   },
-  required: ['email', 'password', 'challengeName', 'session'],
+  required: ['email', 'password', 'challengeName'],
 } as const;
 
 export default schema;

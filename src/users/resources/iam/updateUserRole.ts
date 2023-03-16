@@ -1,21 +1,15 @@
 import createLambdaRole from '~/shared/utils/createLambdaRole';
 
-export const LoginRole = createLambdaRole('login', [
+export const UpdateUserRole = createLambdaRole('updateUser', [
   {
-    PolicyName: 'login',
+    PolicyName: 'updateUser',
     PolicyDocument: {
       Version: '2012-10-17',
       Statement: [
         {
-          Sid: 'LambdaCognitoPermissions',
-          Effect: 'Allow',
-          Action: ['cognito-idp:AdminInitiateAuth'],
-          Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
-        },
-        {
           Sid: 'LambdaDynamodbWritePermissions',
           Effect: 'Allow',
-          Action: ['dynamodb:GetItem'],
+          Action: ['dynamodb:UpdateItem'],
           Resource: [{'Fn::GetAtt': ['UsersTable', 'Arn']}],
         },
       ],

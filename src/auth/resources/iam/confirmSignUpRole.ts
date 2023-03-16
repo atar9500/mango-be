@@ -15,6 +15,12 @@ export const ConfirmSignUpRole = createLambdaRole('confirmSignUp', [
           ],
           Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
         },
+        {
+          Sid: 'LambdaDynamodbWritePermissions',
+          Effect: 'Allow',
+          Action: ['dynamodb:GetItem'],
+          Resource: [{'Fn::GetAtt': ['UsersTable', 'Arn']}],
+        },
       ],
     },
   },

@@ -18,12 +18,12 @@ const isNumberOptedOut = async (phoneNumber: string) => {
   return response.isOptedOut;
 };
 
-const generateOtp = async (accessToken: string) => {
+const generateOtp = async (accessToken: string, phoneNumber: string) => {
   try {
     return await cognito
-      .getUserAttributeVerificationCode({
+      .updateUserAttributes({
         AccessToken: accessToken,
-        AttributeName: 'phone_number',
+        UserAttributes: [{Name: 'phone_number', Value: phoneNumber}],
       })
       .promise();
   } catch (e) {
@@ -37,7 +37,7 @@ const sendOtp: SendOtpLambda = async ({body, accessToken}) => {
     return formatJSONResponse({}, {statusCode: 400});
   }
 
-  await generateOtp(accessToken);
+  await generateOtp(accessToken, body.phoneNumber);
 
   return formatJSONResponse({});
 };

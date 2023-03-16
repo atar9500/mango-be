@@ -1,5 +1,12 @@
-export type User = {
+export type UserAuth = {
   id: string;
   email: string;
-  name: string;
+  phoneNumber?: string;
+};
+
+export type User = UserAuth & {
+  firstName: string;
+  lastName: string;
+  joinedAt: number;
+  avatar?: string;
 };

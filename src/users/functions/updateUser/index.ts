@@ -4,12 +4,12 @@ import schema from './schema';
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
-  role: {'Fn::GetAtt': ['UpdateUserDetailsRole', 'Arn']},
+  role: {'Fn::GetAtt': ['UpdateUserRole', 'Arn']},
   events: [
     {
       http: {
         method: 'post',
-        path: 'auth/update_user_details',
+        path: 'user/update',
         cors: true,
         request: {
           schemas: {

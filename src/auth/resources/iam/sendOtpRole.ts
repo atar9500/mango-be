@@ -23,7 +23,7 @@ export const SendOtpRole = createLambdaRole('sendOtp', [
         {
           Sid: 'LambdaCognitoPermissions',
           Effect: 'Allow',
-          Action: ['cognito-idp:GetUserAttributeVerificationCode'],
+          Action: ['cognito-idp:UpdateUserAttributes'],
           Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
         },
       ],

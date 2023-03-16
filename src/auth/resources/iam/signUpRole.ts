@@ -12,6 +12,12 @@ export const SignUpRole = createLambdaRole('signUp', [
           Action: ['cognito-idp:AdminCreateUser'],
           Resource: [{'Fn::GetAtt': ['UserPool', 'Arn']}],
         },
+        {
+          Sid: 'LambdaDynamodbWritePermissions',
+          Effect: 'Allow',
+          Action: ['dynamodb:PutItem'],
+          Resource: [{'Fn::GetAtt': ['UsersTable', 'Arn']}],
+        },
       ],
     },
   },

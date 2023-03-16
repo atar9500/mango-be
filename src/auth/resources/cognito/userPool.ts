@@ -8,14 +8,10 @@ export const UserPool = {
       {
         Name: 'email',
         Required: true,
-      },
-      {
-        Name: 'phone_number',
         Mutable: true,
       },
       {
-        Name: 'name',
-        Required: true,
+        Name: 'phone_number',
         Mutable: true,
       },
     ],

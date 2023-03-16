@@ -1,4 +1,4 @@
-import {CognitoIdentityServiceProvider} from 'aws-sdk';
+import {CognitoIdentityServiceProvider, DynamoDB} from 'aws-sdk';
 
 import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
@@ -8,6 +8,7 @@ import {parseIdToken} from '~/shared/utils/headerParsers';
 import Schema from './schema';
 
 const cognito = new CognitoIdentityServiceProvider();
+const db = new DynamoDB.DocumentClient();
 
 type LoginLambda = APIGatewayHandler<typeof Schema>;
 
@@ -25,17 +26,31 @@ const login: LoginLambda = async event => {
     .promise();
 
   if (AuthenticationResult) {
-    const user = parseIdToken(AuthenticationResult.IdToken);
-    return formatJSONResponse(user, {
-      headers: {
-        'Access-Token': AuthenticationResult.AccessToken,
-        'Refresh-Token': AuthenticationResult.RefreshToken,
-        'Id-Token': AuthenticationResult.IdToken,
+    const {id, ...userAuth} = parseIdToken(AuthenticationResult.IdToken);
+    const {Item} = await db
+      .get({
+        TableName: process.env.USERS_TABLE,
+        Key: {id},
+        ProjectionExpression: 'firstName, lastName',
+      })
+      .promise();
+
+    return formatJSONResponse(
+      {...Item, ...userAuth},
+      {
+        headers: {
+          'Access-Token': AuthenticationResult.AccessToken,
+          'Refresh-Token': AuthenticationResult.RefreshToken,
+          'Id-Token': AuthenticationResult.IdToken,
+        },
       },
-    });
+    );
   }
 
-  return formatJSONResponse(response);
+  return formatJSONResponse(
+    {challenge: response.ChallengeName},
+    {headers: {Session: response.Session}},
+  );
 };
 
 export const main = middyfyLambda(login);
