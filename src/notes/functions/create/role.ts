@@ -9,7 +9,7 @@ export const CreateNoteRole = createLambdaRole('createNote', [
         {
           Sid: 'LambdaDynamodbWritePermissions',
           Effect: 'Allow',
-          Action: ['dynamodb:PutItem'],
+          Action: ['dynamodb:PutItem', 'dynamodb:UpdateItem'],
           Resource: [{'Fn::GetAtt': ['NotesTable', 'Arn']}],
         },
         {

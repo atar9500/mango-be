@@ -57,10 +57,7 @@ const editNote = async (
   await db
     .update({
       TableName: process.env.NOTES_TABLE,
-      ...getTableUpdateParams(
-        {content, modifiedAt: Date.now(), ...rest},
-        {id, author},
-      ),
+      ...getTableUpdateParams({modifiedAt: Date.now(), ...rest}, {id, author}),
     })
     .promise();
 
