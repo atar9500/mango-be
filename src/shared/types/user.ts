@@ -1,8 +1,9 @@
 export type UserAuth = {
-  id: string;
   email: string;
   phoneNumber?: string;
 };
+
+export type UserAuthWithId = UserAuth & {id: string};
 
 export type User = UserAuth & {
   firstName: string;

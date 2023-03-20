@@ -5,7 +5,7 @@ import type {
 } from 'aws-lambda';
 import type {FromSchema} from 'json-schema-to-ts';
 
-import {UserAuth} from './user';
+import {UserAuthWithId} from './user';
 
 export type QueryParamsDefault = Record<string, string>;
 
@@ -31,7 +31,7 @@ export type AuthorizedAPIGatewayProxyEvent<
 > = ValidatedAPIGatewayProxyEvent<Body, QueryParams> & {
   accessToken: string;
   refreshToken: string;
-  user: UserAuth;
+  user: UserAuthWithId;
 };
 
 export type AuthorizedAPIGatewayHandler<

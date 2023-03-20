@@ -1,6 +1,6 @@
 import {Middleware} from '~/shared/types/middleware';
 
-import getNotesService from '../services/notesService/notesService';
+import getNotesService from '../services/notesService';
 import {NotesAPIGatewayProxyEvent} from '../types/notesApiGateway';
 
 const notesMiddleware = (): Middleware<NotesAPIGatewayProxyEvent> => ({

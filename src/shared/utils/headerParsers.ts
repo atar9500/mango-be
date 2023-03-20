@@ -7,7 +7,7 @@ const BEARER_REGEX = /^(Bearer+\s)*([a-zA-Z0-9-_.]+)$/;
 export const parseBearerToken = (bearerToken: string) =>
   BEARER_REGEX.exec(bearerToken)[2];
 
-export const parseIdToken = (idToken: string): UserAuth => {
+export const parseIdToken = (idToken: string): UserAuth & {id: string} => {
   let value = idToken;
   if (BEARER_REGEX.test(idToken)) {
     value = parseBearerToken(idToken);

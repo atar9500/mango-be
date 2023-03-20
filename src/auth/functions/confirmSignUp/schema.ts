@@ -1,11 +1,11 @@
 const schema = {
   type: 'object',
   properties: {
-    challengeName: {type: 'string'},
+    challenge: {type: 'string'},
     password: {type: 'string'},
     email: {type: 'string'},
   },
-  required: ['email', 'password', 'challengeName'],
+  required: ['email', 'password', 'challenge'],
 } as const;
 
 export default schema;

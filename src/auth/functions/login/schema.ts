@@ -4,7 +4,7 @@ const schema = {
     email: {type: 'string'},
     password: {type: 'string'},
   },
-  required: ['password'],
+  required: ['email', 'password'],
 } as const;
 
 export default schema;
