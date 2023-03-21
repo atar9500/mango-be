@@ -1,6 +1,6 @@
 import {S3, DynamoDB} from 'aws-sdk';
 
-import getTableUpdateParams from '~/shared/utils/getTableUpdateParams';
+import getDBUpdateParams from '~/shared/utils/getDBUpdateParams';
 
 import {Note} from '../../types/note';
 
@@ -57,7 +57,7 @@ const editNote = async (
   await db
     .update({
       TableName: process.env.NOTES_TABLE,
-      ...getTableUpdateParams({modifiedAt: Date.now(), ...rest}, {id, author}),
+      ...getDBUpdateParams({modifiedAt: Date.now(), ...rest}, {id, author}),
     })
     .promise();
 

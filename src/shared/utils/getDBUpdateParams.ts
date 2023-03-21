@@ -9,7 +9,7 @@ type UpdateParams = Pick<
   | 'ExpressionAttributeValues'
 >;
 
-const getTableUpdateParams = (
+const getDBUpdateParams = (
   params: Record<string, unknown>,
   keys: Record<string, unknown>,
 ): UpdateParams => ({
@@ -37,4 +37,4 @@ const getTableUpdateParams = (
   ),
 });
 
-export default getTableUpdateParams;
+export default getDBUpdateParams;

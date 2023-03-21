@@ -17,6 +17,7 @@
     "@middy/core": "^3.4.0",
     "@middy/http-error-handler": "^4.2.6",
     "@middy/http-json-body-parser": "^3.4.0",
+    "formidable": "^2.1.1",
     "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {

@@ -1,5 +1,3 @@
-import {CognitoIdentityServiceProvider, DynamoDB} from 'aws-sdk';
-
 import type {APIGatewayHandler} from '~/shared/types/apiGateway';
 import formatJSONResponse from '~/shared/utils/formatJSONResponse';
 import middyfyLambda from '~/shared/middlewares/middyfyLambda';

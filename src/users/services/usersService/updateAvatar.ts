@@ -1,6 +1,6 @@
 import {S3, DynamoDB} from 'aws-sdk';
 
-import getTableUpdateParams from '~/shared/utils/getTableUpdateParams';
+import getDBUpdateParams from '~/shared/utils/getDBUpdateParams';
 
 const EXT_REGEX = /\/(jpg|jpeg|png)$/;
 
@@ -55,7 +55,7 @@ const updateAvatar = async (
     await deleteAvatar(s3, id);
   }
 
-  const params = getTableUpdateParams({avatar: url}, {id});
+  const params = getDBUpdateParams({avatar: url}, {id});
   await db.update({TableName: process.env.USERS_TABLE, ...params}).promise();
 
   return url;

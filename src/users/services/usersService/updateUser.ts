@@ -1,6 +1,6 @@
 import {DynamoDB} from 'aws-sdk';
 
-import getTableUpdateParams from '~/shared/utils/getTableUpdateParams';
+import getDBUpdateParams from '~/shared/utils/getDBUpdateParams';
 
 export type UpdateUserArgs = {
   id: string;
@@ -12,7 +12,7 @@ const updateUser = async (
   db: DynamoDB.DocumentClient,
   {id, ...rest}: UpdateUserArgs,
 ): Promise<void> => {
-  const params = getTableUpdateParams(rest, {id});
+  const params = getDBUpdateParams(rest, {id});
   await db.update({TableName: process.env.USERS_TABLE, ...params}).promise();
 };
 
