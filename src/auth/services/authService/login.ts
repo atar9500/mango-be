@@ -36,7 +36,7 @@ const login = async (
       .get({
         TableName: process.env.USERS_TABLE,
         Key: {id},
-        ProjectionExpression: 'firstName, lastName',
+        ProjectionExpression: 'firstName, lastName, avatar',
       })
       .promise();
     const headers = {
