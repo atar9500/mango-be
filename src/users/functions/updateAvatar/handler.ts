@@ -7,11 +7,8 @@ import {UsersAPIGatewayHandler} from '../../types/usersApiGateway';
 
 type UpdateAvatarLambda = UsersAPIGatewayHandler<typeof Schema>;
 
-const updateAvatar: UpdateAvatarLambda = async ({body, headers, service}) => {
-  const avatar = await service.updateAvatar({
-    file: body,
-    type: headers['Content-Type'],
-  });
+const updateAvatar: UpdateAvatarLambda = async event => {
+  const avatar = await event.service.updateAvatar({event});
   return formatJSONResponse({avatar});
 };
 

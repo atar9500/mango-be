@@ -14,7 +14,7 @@ export type ValidatedAPIGatewayProxyEvent<
   QueryParams extends QueryParamsDefault = QueryParamsDefault,
 > = Omit<APIGatewayProxyEvent, 'body' | 'queryStringParameters'> & {
   body: FromSchema<Body>;
-  queryStringParameters?: QueryParams;
+  queryStringParameters: QueryParams;
 };
 
 export type APIGatewayHandler<

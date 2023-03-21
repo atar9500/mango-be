@@ -1,33 +1,35 @@
 import {S3, DynamoDB} from 'aws-sdk';
+import {APIGatewayProxyEvent} from 'aws-lambda';
+import * as MultipartParser from 'aws-multipart-parser';
+import {FileData} from 'aws-multipart-parser/dist/models';
 
 import getDBUpdateParams from '~/shared/utils/getDBUpdateParams';
 
-const EXT_REGEX = /\/(jpg|jpeg|png)$/;
+const UPPORTED_MIME_TYPES = ['image/jpeg', 'image/png'];
 
 export type UpdateAvatarArgs = {
   id: string;
-  type: string;
-  file?: string;
+  event: APIGatewayProxyEvent;
 };
 
 const uploadAvatar = async (
   s3: S3,
-  {id, file, type}: Required<UpdateAvatarArgs>,
+  id: string,
+  {contentType, filename, content}: FileData,
 ) => {
-  const ext = EXT_REGEX.exec?.(type)?.[1];
-  if (!ext) {
+  if (!UPPORTED_MIME_TYPES.includes(contentType)) {
     throw Error('File extension is not supported!');
   }
-  const filePath = `${id}/avatar.${ext}`;
+  const filePath = `${id}/avatar/${filename}`;
 
   await s3
     .putObject({
       Bucket: process.env.USERS_BUCKET,
       ACL: 'public-read',
-      Body: Buffer.from(file, 'base64'),
+      Body: Buffer.from(content as string, 'binary'),
       Key: filePath,
-      ContentType: type,
-      Metadata: {id, type},
+      ContentType: contentType,
+      Metadata: {id, contentType},
     })
     .promise();
 
@@ -46,11 +48,13 @@ const deleteAvatar = async (s3: S3, id: string) => {
 const updateAvatar = async (
   s3: S3,
   db: DynamoDB.DocumentClient,
-  {id, file, type}: UpdateAvatarArgs,
+  {id, event}: UpdateAvatarArgs,
 ): Promise<string> => {
+  const {file} = MultipartParser.parse(event, false);
+
   let url = '';
-  if (file) {
-    url = await uploadAvatar(s3, {id, file, type});
+  if (typeof file !== 'string') {
+    url = await uploadAvatar(s3, id, file);
   } else {
     await deleteAvatar(s3, id);
   }

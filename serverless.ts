@@ -13,7 +13,7 @@ const serverlessConfiguration: AWS = {
   useDotenv: true,
   service: '${env:SERVICE}',
   frameworkVersion: '3',
-  plugins: ['serverless-esbuild'],
+  plugins: ['serverless-esbuild', 'serverless-apigw-binary'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -55,6 +55,9 @@ const serverlessConfiguration: AWS = {
       define: {'require.resolve': undefined},
       platform: 'node',
       concurrency: 10,
+    },
+    apigwBinary: {
+      types: ['multipart/form-data'],
     },
   },
 };
